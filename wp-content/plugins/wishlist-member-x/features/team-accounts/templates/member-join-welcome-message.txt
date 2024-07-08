@@ -1,0 +1,1 @@
+<p>You have joined [wlm_joined_team_plan_name] administered by [wlm_joined_team_plan_admin].</p>

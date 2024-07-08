@@ -1,0 +1,1 @@
+<p>You are a team admin of [wlm_managed_team_plan_name].</p>

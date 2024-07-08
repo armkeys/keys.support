@@ -1,0 +1,7 @@
+<wpml-config>
+    <admin-texts>
+        <key name='kscompany_settings'>
+            <key name='kscompany_description' />
+        </key>
+    </admin-texts>
+</wpml-config>

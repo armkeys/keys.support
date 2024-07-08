@@ -1,0 +1,9 @@
+#################################################################
+# This file is added to list known conflicts with other plugins #
+#################################################################
+
+Plugin: Pretty Link Pro
+URL: wordpress.org/extend/plugins/pretty-link/
+Conflict: It caches the registration form if Content Replacement Caching is enabled
+
+EOF.
