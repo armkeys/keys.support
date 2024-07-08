@@ -333,9 +333,9 @@ function get_post_name() {
         
         $sql = $wpdb->prepare(
             "SELECT p.ID AS post_id, p.post_name, t.language_code 
-            FROM {$wpdb->postmeta} pm
-            LEFT JOIN {$wpdb->icl_translations} t ON pm.post_id = t.element_id
-            LEFT JOIN {$wpdb->posts} p ON pm.post_id = p.ID
+            FROM {$wpdb->prefix}postmeta pm
+            LEFT JOIN {$wpdb->prefix}icl_translations t ON pm.post_id = t.element_id
+            LEFT JOIN {$wpdb->prefix}posts p ON pm.post_id = p.ID
             WHERE p.post_type = 'product' 
             AND pm.meta_key = 'sku' 
             AND pm.meta_value = %s 
