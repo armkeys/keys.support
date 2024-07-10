@@ -180,9 +180,12 @@ function kb_dropdown_categories($atts) {
     $term_id = $term->term_id ?? 0;
 
     $category = $term->name ?? $labels['category'];
-    $software = $post_prod->post_title ?? $labels['software'];
+    $software = 'Product';
+    if($post_prod->post_title!="" && $post_prod->post_title!="Download Center"){
+        $software = $post_prod->post_title;
+    }
+    // $software = $post_prod->post_title ?? $labels['software'];
     $system = $labels['system'];
-
     ?>
 
     <div class="form-group">
@@ -209,6 +212,7 @@ function kb_dropdown_categories($atts) {
     <div class="form-group">
         <select id="software-filter-download" name="software-filter-download" class="form-control btn-outline-danger">
             <option class="form-control" value="<?php echo esc_attr($post_prod->post_name ?? ''); ?>"><?php echo esc_html($software); ?></option>
+
             <?php
             global $wpdb;
             $query = $wpdb->get_results($wpdb->prepare(
