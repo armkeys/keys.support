@@ -240,6 +240,11 @@ $lang = $params['lang'];
 <script>
         document.addEventListener('DOMContentLoaded', function() {
 
+            var downloadCol = document.querySelector('.download-col');
+            if (downloadCol) {
+                downloadCol.style.display = 'none';
+            }
+
             // Get the language switcher container
             var langSwitcherContainer = document.querySelector('.wpml-ls-legacy-dropdown');
 
