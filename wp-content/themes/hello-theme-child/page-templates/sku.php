@@ -4,6 +4,7 @@
 
 get_header();
 
+$base_url = site_url();
 
 if($_GET['sku'] != null &&  $_GET['lang'] != null){
 ?>
@@ -12,6 +13,8 @@ if($_GET['sku'] != null &&  $_GET['lang'] != null){
 var sku = "<?php echo $_GET['sku']; ?>";
 var lang = "<?php echo $_GET['lang']; ?>";
 //alert(sku);
+
+
   
 jQuery.ajax({
 			url: ajax_object.url,
@@ -22,11 +25,11 @@ jQuery.ajax({
 			  console.log("RES Post Name",res);
          var len = res.length;
 			  if(len == 0){
-	     		window.open("https://keys.support/en/download-center","_self");
+	     		window.open("<?php echo $base_url; ?>/en/download-center","_self");
 				jQuery("#notFoundModalCenter").modal('show');
 			  }
 			  for(var i=0; i<len;i++){
-				var search_url = "https://keys.support/"+res[i].prod_lang+"/product/"+res[i].prod_slug+"/?slug="+res[i].prod_slug;   
+				var search_url = "<?php echo $base_url; ?>/"+res[i].prod_lang+"/product/"+res[i].prod_slug+"/?slug="+res[i].prod_slug;   
         window.open(search_url,"_self");
 		    }
 			}

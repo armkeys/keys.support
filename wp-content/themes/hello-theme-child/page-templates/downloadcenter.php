@@ -45,6 +45,8 @@ $installation_labels = [
 ];
 
 $installation_label = $installation_labels[$lang] ?? $installation_labels['en'];
+
+
 ?>
 
 <div class="container download-center-template"><!--start of root element -->
@@ -94,8 +96,12 @@ $installation_label = $installation_labels[$lang] ?? $installation_labels['en'];
           <div class="row">
               <div class="col-md-6 col-sm-12">
                   <?php 
-                  echo do_shortcode('[wpml_language_switcher type="widget" flags=1 native=1 translated=0][/wpml_language_switcher]');
+                  echo '<div class="lang-switcher">';
+                    echo do_shortcode('[wpml_language_switcher type="widget" flags=1 native=1 translated=0][/wpml_language_switcher]');
+                  echo '</div>';
+
                   echo do_shortcode('[product_category_filter product_id=' . $id . ']');
+
                   ?>
                   <br/>
               </div>
@@ -215,5 +221,75 @@ $installation_label = $installation_labels[$lang] ?? $installation_labels['en'];
           </div>
       </div>
 </div><!--end of root element -->
+<style>
+        .wpml-ls-label {
+            font-weight: bold;
+            display: block;
+            padding: 10px 0;
+        }
+    </style>
+
+<?php 
+$http_referrer = $_SERVER['HTTP_REFERER'];
+$url_components = parse_url($http_referrer);
+parse_str($url_components['query'], $params);
+$sku = $params['sku'];
+$lang = $params['lang'];
+?>
+<?php if($sku!="" && $lang!=""): ?>
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            var downloadCol = document.querySelector('.download-col');
+            if (downloadCol) {
+                downloadCol.style.display = 'none';
+            }
+
+            // Get the language switcher container
+            var langSwitcherContainer = document.querySelector('.wpml-ls-legacy-dropdown');
+
+            // Get the current language item
+            var currentLanguageItem = document.querySelector('.wpml-ls-current-language');
+
+
+
+            // Clone the first anchor element
+            var firstAnchor = document.querySelector('.wpml-ls-legacy-dropdown > ul > li > a');
+
+            var clonedAnchor = firstAnchor.cloneNode(true); // Clone the anchor element
+                clonedAnchor.setAttribute('href', '<?php echo get_permalink(); ?>');
+                clonedAnchor.classList.remove('js-wpml-ls-item-toggle', 'wpml-ls-item-toggle');
+            var newLi = document.createElement('li');
+                newLi.className = 'wpml-ls-slot wpml-ls-item wpml-ls-item-<?php echo $lang; ?>'; // Add necessary classes to the new li
+                newLi.appendChild(clonedAnchor);
+
+            // Find the dropdown element
+            var dropdown = document.querySelector('.wpml-ls-legacy-dropdown > ul > li');
+            var firstAnchor = dropdown.querySelector('a');
+            firstAnchor.remove();
+
+            // add label to the dropdown
+            var labelHTML = '<a href="#" class="js-wpml-ls-item-toggle wpml-ls-item-toggle"><span class="wpml-ls-native js-wpml-ls-item-toggle              wpml-ls-item-toggle">Language</span></a>';
+            var tempDiv = document.createElement('div');
+                tempDiv.innerHTML = labelHTML;
+            var labelElement = tempDiv.firstChild;
+            var dropdown = document.querySelector('.wpml-ls-legacy-dropdown > ul > li');
+            dropdown.insertBefore(labelElement, dropdown.firstChild); // Insert the labelElement as the first child of dropdown
+
+            // Get the submenu element
+            var submenu = document.querySelector('.wpml-ls-sub-menu');
+
+            submenu.appendChild(newLi); // Append the cloned anchor element to the submenu
+
+            // Move all language items (including current language) to the submenu
+            var languageItems = langSwitcherContainer.querySelectorAll('li');
+            languageItems.forEach(function(item) {
+                if (!item.classList.contains('wpml-ls-sub-menu')) {
+                    // submenu.appendChild(item);
+                }
+            });
+        });
+    </script>
+<?php endif; ?>
 
 <?php get_footer(); ?>
