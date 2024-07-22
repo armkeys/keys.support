@@ -229,19 +229,12 @@ $installation_label = $installation_labels[$lang] ?? $installation_labels['en'];
         }
     </style>
 
-<?php 
-$http_referrer = $_SERVER['HTTP_REFERER'];
-$url_components = parse_url($http_referrer);
-parse_str($url_components['query'], $params);
-$sku = $params['sku'];
-$lang = $params['lang'];
-?>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    var sku = "<?php echo $sku; ?>";
-    var lang = "<?php echo $lang; ?>";
-    
-    //if (sku && lang) {
+
+    const ur_sc = window.location.href;
+	let lang = ur_sc.match(/\/(en|de|el|fr|it|pt-pt|es|tr|cs|nl|sk|be)\//);
+
         var downloadCol = document.querySelector('.download-col');
         if (downloadCol) {
             downloadCol.style.display = 'none';
@@ -263,7 +256,8 @@ document.addEventListener('DOMContentLoaded', function() {
             var dropdown = document.querySelector('.wpml-ls-legacy-dropdown > ul > li');
             if (dropdown) {
                 var label;
-                switch (lang) {
+
+                switch (lang[1]) {
                     case 'de':
                         label = 'Sprache';
                         break;
@@ -294,7 +288,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     default:
                         label = 'Language';
                 }
-
+                var firstAnchor = dropdown.querySelector('a');
+                firstAnchor.remove();
+                
                 var labelHTML = '<a href="#" class="js-wpml-ls-item-toggle wpml-ls-item-toggle"><span class="wpml-ls-native js-wpml-ls-item-toggle wpml-ls-item-toggle">' + label + '</span></a>';
                 var tempDiv = document.createElement('div');
                 tempDiv.innerHTML = labelHTML;
@@ -308,9 +304,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
         }
-    //}
+    
 });
 </script>
-
 
 <?php get_footer(); ?>
