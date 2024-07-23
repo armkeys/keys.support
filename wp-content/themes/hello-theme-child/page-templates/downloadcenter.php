@@ -270,7 +270,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     case 'sk':
                         label = 'Jazyk';
                         break;
-                    case 'cz':
+                    case 'cs':
                         label = 'Jazyk';
                         break;
                     case 'pt-pt':
