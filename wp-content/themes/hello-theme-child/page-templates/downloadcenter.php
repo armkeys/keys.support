@@ -229,67 +229,83 @@ $installation_label = $installation_labels[$lang] ?? $installation_labels['en'];
         }
     </style>
 
-<?php 
-$http_referrer = $_SERVER['HTTP_REFERER'];
-$url_components = parse_url($http_referrer);
-parse_str($url_components['query'], $params);
-$sku = $params['sku'];
-$lang = $params['lang'];
-?>
-<?php if($sku!="" && $lang!=""): ?>
 <script>
-        document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
 
-            var downloadCol = document.querySelector('.download-col');
-            if (downloadCol) {
-                downloadCol.style.display = 'none';
-            }
+    const ur_sc = window.location.href;
+	let lang = ur_sc.match(/\/(en|de|el|fr|it|pt-pt|es|tr|cs|nl|sk|be)\//);
 
-            // Get the language switcher container
-            var langSwitcherContainer = document.querySelector('.wpml-ls-legacy-dropdown');
+        var downloadCol = document.querySelector('.download-col');
+        if (downloadCol) {
+            downloadCol.style.display = 'none';
+        }
 
-            // Get the current language item
-            var currentLanguageItem = document.querySelector('.wpml-ls-current-language');
+        var langSwitcherContainer = document.querySelector('.wpml-ls-legacy-dropdown');
+        var currentLanguageItem = document.querySelector('.wpml-ls-current-language');
+        var firstAnchor = document.querySelector('.wpml-ls-legacy-dropdown > ul > li > a');
+        
+        if (firstAnchor) {
+            var clonedAnchor = firstAnchor.cloneNode(true);
+            clonedAnchor.setAttribute('href', '<?php echo get_permalink(); ?>');
+            clonedAnchor.classList.remove('js-wpml-ls-item-toggle', 'wpml-ls-item-toggle');
 
-
-
-            // Clone the first anchor element
-            var firstAnchor = document.querySelector('.wpml-ls-legacy-dropdown > ul > li > a');
-
-            var clonedAnchor = firstAnchor.cloneNode(true); // Clone the anchor element
-                clonedAnchor.setAttribute('href', '<?php echo get_permalink(); ?>');
-                clonedAnchor.classList.remove('js-wpml-ls-item-toggle', 'wpml-ls-item-toggle');
             var newLi = document.createElement('li');
-                newLi.className = 'wpml-ls-slot wpml-ls-item wpml-ls-item-<?php echo $lang; ?>'; // Add necessary classes to the new li
-                newLi.appendChild(clonedAnchor);
+            newLi.className = 'wpml-ls-slot wpml-ls-item wpml-ls-item-' + lang;
+            newLi.appendChild(clonedAnchor);
 
-            // Find the dropdown element
             var dropdown = document.querySelector('.wpml-ls-legacy-dropdown > ul > li');
-            var firstAnchor = dropdown.querySelector('a');
-            firstAnchor.remove();
+            if (dropdown) {
+                var label;
 
-            // add label to the dropdown
-            var labelHTML = '<a href="#" class="js-wpml-ls-item-toggle wpml-ls-item-toggle"><span class="wpml-ls-native js-wpml-ls-item-toggle              wpml-ls-item-toggle">Language</span></a>';
-            var tempDiv = document.createElement('div');
-                tempDiv.innerHTML = labelHTML;
-            var labelElement = tempDiv.firstChild;
-            var dropdown = document.querySelector('.wpml-ls-legacy-dropdown > ul > li');
-            dropdown.insertBefore(labelElement, dropdown.firstChild); // Insert the labelElement as the first child of dropdown
-
-            // Get the submenu element
-            var submenu = document.querySelector('.wpml-ls-sub-menu');
-
-            submenu.appendChild(newLi); // Append the cloned anchor element to the submenu
-
-            // Move all language items (including current language) to the submenu
-            var languageItems = langSwitcherContainer.querySelectorAll('li');
-            languageItems.forEach(function(item) {
-                if (!item.classList.contains('wpml-ls-sub-menu')) {
-                    // submenu.appendChild(item);
+                switch (lang[1]) {
+                    case 'de':
+                        label = 'Sprache';
+                        break;
+                    case 'fr':
+                        label = 'Langue';
+                        break;
+                    case 'it':
+                        label = 'Lingua';
+                        break;
+                    case 'sk':
+                        label = 'Jazyk';
+                        break;
+                    case 'cs':
+                        label = 'Jazyk';
+                        break;
+                    case 'pt-pt':
+                        label = 'Língua';
+                        break;
+                    case 'es':
+                        label = 'Idioma';
+                        break;
+                    case 'be':
+                        label = 'Taal';
+                        break;
+                    case 'el':
+                        label = 'Γλώσσα';
+                        break;
+                    default:
+                        label = 'Language';
                 }
-            });
-        });
-    </script>
-<?php endif; ?>
+                var firstAnchor = dropdown.querySelector('a');
+                firstAnchor.remove();
+                
+                var labelHTML = '<a href="#" class="js-wpml-ls-item-toggle wpml-ls-item-toggle"><span class="wpml-ls-native js-wpml-ls-item-toggle wpml-ls-item-toggle">' + label + '</span></a>';
+                var tempDiv = document.createElement('div');
+                tempDiv.innerHTML = labelHTML;
+                var labelElement = tempDiv.firstChild;
+
+                dropdown.insertBefore(labelElement, dropdown.firstChild);
+
+                var submenu = document.querySelector('.wpml-ls-sub-menu');
+                if (submenu) {
+                    submenu.appendChild(newLi);
+                }
+            }
+        }
+    
+});
+</script>
 
 <?php get_footer(); ?>
