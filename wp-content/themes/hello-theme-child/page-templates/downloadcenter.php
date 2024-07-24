@@ -228,7 +228,14 @@ $installation_label = $installation_labels[$lang] ?? $installation_labels['en'];
             padding: 10px 0;
         }
     </style>
-
+<?php 
+$http_referrer = $_SERVER['HTTP_REFERER'];
+$url_components = parse_url($http_referrer);
+parse_str($url_components['query'], $params);
+$sku = $params['sku'];
+$lang = $params['lang'];
+?>
+<?php if($sku!="" && $lang!=""): ?>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
 
@@ -304,8 +311,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
         }
-    
 });
 </script>
-
+<?php endif; ?>
 <?php get_footer(); ?>
