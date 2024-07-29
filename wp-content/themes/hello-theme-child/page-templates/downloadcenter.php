@@ -232,10 +232,39 @@ $installation_label = $installation_labels[$lang] ?? $installation_labels['en'];
 $http_referrer = $_SERVER['HTTP_REFERER'];
 $url_components = parse_url($http_referrer);
 parse_str($url_components['query'], $params);
+
 $sku = $params['sku'];
-$lang = $params['lang'];
+$lang = $lang = isset($params['lang']) && $params['lang'] !== '' ? $params['lang'] : $lang;
+
+$search_terms = [
+    'en' => 'download-center',
+    'fr' => 'centre-de-telechargement',
+    'es' => 'centro-de-descargas',
+    'pt-pt' => 'centro-de-download',
+    'it' => 'centro-download',
+    'el' => 'κέντρο-λήψης',
+    'cs' => 'centrum-stahovani',
+    'sk' => 'centrum-stahovania',
+    'be' => 'downloadcentrum'
+];
+$parsed_url = parse_url($http_referrer);
+$path = $parsed_url['path'];
+$found = false;
+foreach ($search_terms as $term) {
+    if (strpos($path, $term) !== false) {
+        $found = true;
+        break;
+    }
+}
+
+$product_found = false;
+if (strpos($_SERVER['REQUEST_URI'], 'product') !== false) {
+    $product_found = true;
+}
 ?>
-<?php if($sku!="" && $lang!=""): ?>
+
+<?php if( ( $sku!="" && $lang!="" ) || ( !$found && !$product_found ) ): ?>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
 
