@@ -116,7 +116,7 @@ if($_GET['id'] != null){
     ?>
       <script>
        alert("PRODUCT SKU NOT FOUND")
-     	window.open("https://keys.support/en/download-center","_self");
+     	 window.open("https://keys.support/en/download-center","_self");
        </script>
     <?php 
     }
@@ -130,29 +130,15 @@ if($_GET['id'] != null){
 if($lang == 'en'){
   $options = get_option('ksinstallation_guide_settings',array());
 
-  if (!isset($options['kscontact_number'])) {
-    $options['kscontact_number'] = '';
-  }
-  if (!isset($options['kscompany_email'])) {
-    $options['kscompany_email'] = '';
-  }
-
-  $email= $options['kscompany_email'];
-  $phone = $options['kscontact_number'];
+  $email= !empty($options['kscompany_email']) ? $options['kscompany_email']: '';
+  $phone = !empty($options['kscontact_number']) ? $options['kscontact_number']: '';
   $contact_us = "Contact Form";
   $contact_details = "Contact Details";
 }elseif($lang == 'de'){
   $options = get_option('ksinstallation_guide_settings',array());
 
-  if (!empty($options['kscontact_number_de'])) {
-    $options['kscontact_number_de'] = '';
-  }
-  if (!empty($options['kscompany_email_de'] ) ) {
-    $options['kscompany_email_de'] = '';
-  }
-
-  $email= $options['kscompany_email_de'];
-  $phone = $options['kscontact_number_de'];
+  $email = !empty($options['kscompany_email_de']) ? $options['kscompany_email_de'] : '';
+  $phone = !empty($options['kscontact_number_de']) ? $options['kscontact_number_de'] : '';
   $contact_us = "Kontaktformular";
   $contact_details = "Kontaktdaten";
 }elseif($lang == 'el'){
@@ -163,57 +149,29 @@ if($lang == 'en'){
 }elseif($lang == 'fr'){
   $options = get_option('ksinstallation_guide_settings',array());
 
-  if ( !isset( $options['kscontact_number_fr'] ) ) {
-    $options['kscontact_number_fr'] = '';
-  }
-  if ( !isset( $options['kscompany_email_fr'] ) ) {
-    $options['kscompany_email_fr'] = '';
-  }
-
-  $email=  $options['kscompany_email_fr'];
-  $phone = $options['kscontact_number_fr'];
+  $email=  !empty($options['kscompany_email_fr']) ? $options['kscompany_email_fr']: '';
+  $phone = !empty($options['kscontact_number_fr']) ? $options['kscontact_number_fr']: '';
   $contact_us = "Contact Form";
   $contact_details = "Formulaire de contact";
 }elseif($lang == 'it'){
   $options = get_option('ksinstallation_guide_settings',array());
 
-  if ( !isset( $options['kscontact_number_it'] ) ) {
-    $options['kscontact_number_it'] = '';
-  }
-  if ( !isset( $options['kscompany_email_it'] ) ) {
-    $options['kscompany_email_it'] = '';
-  }
-
-  $email= $options['kscompany_email_it'] ;
-  $phone = $options['kscontact_number_it'];
+  $email= !empty($options['kscompany_email_it']) ? $options['kscompany_email_it']: '';
+  $phone = !empty($options['kscontact_number_it']) ? $options['kscontact_number_it']: '';
   $contact_us = "Contact Form";
   $contact_details = "Dettagli del contatto";
 }elseif($lang == 'pt-pt'){
   $options = get_option('ksinstallation_guide_settings',array());
 
-  if ( !isset( $options['kscontact_number_pt'] ) ) {
-    $options['kscontact_number_pt'] = '';
-  }
-  if ( !isset( $options['kscompany_email_pt'] ) ) {
-    $options['kscompany_email_pt'] = '';
-  }
-
-  $email= $options['kscompany_email_pt']; 
-  $phone =  $options['kscontact_number_pt'];
+  $email= !empty($options['kscompany_email_pt']) ? $options['kscompany_email_pt']: ''; 
+  $phone =  !empty($options['kscontact_number_pt']) ? $options['kscontact_number_pt']: '';
   $contact_us = "Contact Form";
   $contact_details = "Detalhes do contato";
 }elseif($lang == 'es'){
   $options = get_option('ksinstallation_guide_settings',array());
 
-  if ( !isset( $options['kscontact_number_es'] ) ) {
-    $options['kscontact_number_es'] = '';
-  }
-  if ( !isset( $options['kscompany_email_es'] ) ) {
-    $options['kscompany_email_es'] = '';
-  }
-
-  $email= $options['kscompany_email_es'] ;
-  $phone = $options['kscontact_number_es'];
+  $email= !empty($options['kscompany_email_es']) ? $options['kscompany_email_es']: '';
+  $phone = !empty($options['kscontact_number_es']) ? $options['kscontact_number_es']: '';
   $contact_us = "Contact Form";
   $contact_details = "Detalles de contacto";
 }elseif($lang == 'tr'){
@@ -229,15 +187,8 @@ if($lang == 'en'){
 }elseif($lang == 'sk'){
   $options = get_option('ksinstallation_guide_settings',array());
 
-  if (!isset( $options['kscontact_number_sk'] ) ) {
-    $options['kscontact_number_sk'] = '';
-  }
-  if ( !isset( $options['kscompany_email_sk'] ) ) {
-    $options['kscompany_email_sk'] = '';
-  }
-
-  $email= $options['kscompany_email_sk'];
-  $phone = $options['kscontact_number_sk'];
+  $email= !empty($options['kscompany_email_sk']) ? $options['kscompany_email_sk']: '';
+  $phone = !empty($options['kscontact_number_sk']) ? $options['kscontact_number_sk']: '';
   $contact_us = "Kontaktný formulár";
   $contact_details = "Kontaktné údaje";
 }
@@ -342,33 +293,39 @@ span.fa  {
 
 <?php get_footer(); ?>
 <div class="wpml-ls wpml-ls-legacy-list-horizontal text-center">
-	<ul>
+    <ul>
+        <?php
+        $languages = [
+            'de' => 'Deutsch',
+            'fr' => 'Français',
+            'it' => 'Italiano',
+            'en' => 'English',
+            'es' => 'Español',
+            'pt-pt' => 'Português',
+            'sk' => 'Slovenčina'
+        ];
+        
+        $installation_slugs = [
+            'de' => $installation_slug_de,
+            'fr' => $installation_slug_fr,
+            'it' => $installation_slug_it,
+            'en' => $installation_slug_en,
+            'es' => $installation_slug_es,
+            'pt-pt' => $installation_slug_pt,
+            'sk' => $installation_slug_sk
+        ];
 
-     <li class="wpml-ls-slot-footer wpml-ls-item wpml-ls-item-de wpml-ls-first-item wpml-ls-item-legacy-list-horizontal">
-				<a href="https://keys.support/de/<?php echo  $installation_slug_de; ?>"  class="wpml-ls-link">
-      <img class="wpml-ls-flag" src="https://keys.support/wp-content/plugins/sitepress-multilingual-cms/res/flags/de.png" alt="" width="18" height="12"><span class="wpml-ls-native" lang="de">Deutsch</span></a>
-			</li><li class="wpml-ls-slot-footer wpml-ls-item wpml-ls-item-fr wpml-ls-item-legacy-list-horizontal">
-				<a href="https://keys.support/fr/<?php echo  $installation_slug_fr; ?>" class="wpml-ls-link">
-     <img class="wpml-ls-flag" src="https://keys.support/wp-content/plugins/sitepress-multilingual-cms/res/flags/fr.png" alt="" width="18" height="12"><span class="wpml-ls-native" lang="fr">Français</span></a>
-			</li><li class="wpml-ls-slot-footer wpml-ls-item wpml-ls-item-it wpml-ls-item-legacy-list-horizontal">
-				<a href="https://keys.support/it/<?php echo  $installation_slug_it; ?>" class="wpml-ls-link">
-                                                        <img class="wpml-ls-flag" src="https://keys.support/wp-content/plugins/sitepress-multilingual-cms/res/flags/it.png" alt="" width="18" height="12"><span class="wpml-ls-native" lang="it">Italiano</span></a>
-			</li>
-      <li class="wpml-ls-slot-footer wpml-ls-item wpml-ls-item-en wpml-ls-first-item wpml-ls-item-legacy-list-horizontal">
-				<a href="https://keys.support/en/<?php echo  $installation_slug_en; ?>" class="wpml-ls-link">
-        <img class="wpml-ls-flag" src="https://keys.support/wp-content/plugins/sitepress-multilingual-cms/res/flags/en.png" alt="" width="18" height="12"><span class="wpml-ls-native" lang="en">English</span></a>
-			</li>
-      <li class="wpml-ls-slot-footer wpml-ls-item wpml-ls-item-es wpml-ls-last-item wpml-ls-item-legacy-list-horizontal">
-				<a href="https://keys.support/es/<?php echo  $installation_slug_es; ?>" class="wpml-ls-link">
-                                                        <img class="wpml-ls-flag" src="https://keys.support/wp-content/plugins/sitepress-multilingual-cms/res/flags/es.png" alt="" width="18" height="12"><span class="wpml-ls-native" lang="es">Español</span></a>
-			</li>
-      <li class="wpml-ls-slot-footer wpml-ls-item wpml-ls-item-pt-pt wpml-ls-item-legacy-list-horizontal">
-				<a href="https://keys.support/pt-pt/<?php echo  $installation_slug_pt; ?>" class="wpml-ls-link">
-                                                        <img class="wpml-ls-flag" src="https://keys.support/wp-content/plugins/sitepress-multilingual-cms/res/flags/pt-pt.png" alt="" width="18" height="12"><span class="wpml-ls-native" lang="pt-pt">Português</span></a>
-			</li>
-      <li class="wpml-ls-slot-footer wpml-ls-item wpml-ls-item-pt-pt wpml-ls-item-legacy-list-horizontal">
-				<a href="https://keys.support/sk/<?php echo  $installation_slug_sk; ?>" class="wpml-ls-link">
-                                                        <img class="wpml-ls-flag" src="https://keys.support/wp-content/plugins/sitepress-multilingual-cms/res/flags/sk.png" alt="" width="18" height="12"><span class="wpml-ls-native" lang="pt-pt">Slovenčina</span></a>
-			</li>
+        foreach ($languages as $lang_code => $lang_name) {
+            $slug = $installation_slugs[$lang_code];
+            $flag_url = "https://keys.support/wp-content/plugins/sitepress-multilingual-cms/res/flags/{$lang_code}.png";
+            $url = "https://keys.support/{$lang_code}/{$slug}";
+            echo "<li class='wpml-ls-slot-footer wpml-ls-item wpml-ls-item-{$lang_code} wpml-ls-item-legacy-list-horizontal'>
+                    <a href='{$url}' class='wpml-ls-link'>
+                        <img class='wpml-ls-flag' src='{$flag_url}' alt='' width='18' height='12'>
+                        <span class='wpml-ls-native' lang='{$lang_code}'>{$lang_name}</span>
+                    </a>
+                </li>";
+        }
+        ?>
     </ul>
 </div>
