@@ -336,7 +336,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 var submenu = document.querySelector('.wpml-ls-sub-menu');
                 if (submenu) {
-                    submenu.appendChild(newLi);
+                    // submenu.appendChild(newLi);
+                    submenu.insertBefore(newLi, submenu.firstChild);
+
                 }
             }
         }
