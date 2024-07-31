@@ -180,10 +180,53 @@ function kb_dropdown_categories($atts) {
     $term_id = $term->term_id ?? 0;
 
     $category = $term->name ?? $labels['category'];
-    $software = 'Product';
-    if($post_prod->post_title!="" && $post_prod->post_title!="Download Center"){
-        $software = $post_prod->post_title;
+   
+    // if($post_prod->post_title!="" && $post_prod->post_title!="Download Center"){
+    //     $software = $post_prod->post_title;
+    // }
+    
+    switch ($lang) {
+        case 'en':
+            $software = "Program";
+            break;
+        case 'de':
+            $software = "Programm";
+            break;
+        case 'vl':
+            $software = "Programma";
+            break;
+        case 'fr':
+            $software = "Programme";
+            break;
+        case 'el':
+            $software = "πρόγραμμα";
+            break;
+        case 'it':
+            $software = "Programma";
+            break;
+        case 'pt-pt':
+            $software = "Programa";
+            break;
+        case 'es':
+            $software = "Programa";
+            break;
+        case 'cs':
+            $software = "Program";
+            break;
+        case 'tr':
+            $software = "Program";
+            break;
+        case 'sk':
+            $software = "Program";
+            break;
+        case 'be':
+            $software = "Programma";
+            break;
+        default:
+            $software = '';
+            break;
     }
+    
     // $software = $post_prod->post_title ?? $labels['software'];
     $system = $labels['system'];
     ?>
