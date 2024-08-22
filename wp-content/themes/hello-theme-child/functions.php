@@ -164,6 +164,7 @@ function kb_dropdown_categories($atts) {
         'el' => ['category' => 'Κατηγορία', 'software' => 'Λογισμικό', 'system' => 'Σύστημα', 'search_by_sku' => 'Αναζήτηση κατά Κωδικό Προϊόντος(SKU)', 'modal_label' => 'Εισαγάγετε τον αριθμό προϊόντος', 'submit_label' => 'Submit'],
         'it' => ['category' => 'Categoria', 'software' => 'Software', 'system' => 'Sistema', 'search_by_sku' => 'Cerca per numero articolo', 'modal_label' => 'Inserisci il numero dell\'articolo del prodotto', 'submit_label' => 'Submit'],
         'pt-pt' => ['category' => 'Categoria', 'software' => 'Programas', 'system' => 'Sistema', 'search_by_sku' => 'Pesquisar por número de item', 'modal_label' => 'Insira o número do item do produto', 'submit_label' => 'Submit'],
+        'pt-br' => ['category' => 'Categoria', 'software' => 'Software', 'system' => 'Sistema', 'search_by_sku' => 'Pesquisar por número de item', 'modal_label' => 'Insira o número do item do produto', 'submit_label' => 'Submit'],
         'es' => ['category' => 'Categoría', 'software' => 'Software', 'system' => 'Sistema', 'search_by_sku' => 'Buscar por número de artículo', 'modal_label' => 'Ingrese el número de artículo del producto', 'submit_label' => 'Submit'],
         'cs' => ['category' => 'Kategorie', 'software' => 'Software', 'system' => 'Systém', 'search_by_sku' => 'Vyhledávání podle čísla položky', 'modal_label' => 'Zadejte číslo položky produktu', 'submit_label' => 'Submit'],
         'tr' => ['category' => 'Kategori', 'software' => 'Yazılım', 'system' => 'Sistem', 'search_by_sku' => 'Ürün Numarasına Göre Ara', 'modal_label' => 'Ürün Öğe Numarasını Girin', 'submit_label' => 'Submit'],
@@ -257,25 +258,30 @@ function kb_dropdown_categories($atts) {
             <option class="form-control" value="<?php echo esc_attr($post_prod->post_name ?? ''); ?>"><?php echo esc_html($software); ?></option>
 
             <?php
-            global $wpdb;
-            $query = $wpdb->get_results($wpdb->prepare(
-                "SELECT p.post_name, p.post_title 
-                FROM {$wpdb->posts} p 
-                LEFT JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id 
-                WHERE pm.meta_key = 'product_category' AND pm.meta_value = %d 
-                AND p.post_status = 'publish' 
-                ORDER BY p.menu_order", $term_id
-            ), ARRAY_A);
+            if ($term_id != 0) {
+                global $wpdb;
+                $query = $wpdb->get_results($wpdb->prepare(
+                    "SELECT p.post_name, p.post_title 
+                    FROM {$wpdb->posts} p 
+                    LEFT JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id 
+                    WHERE pm.meta_key = 'product_category' AND pm.meta_value = %d 
+                    AND p.post_status = 'publish' 
+                    ORDER BY p.menu_order", $term_id
+                ), ARRAY_A);
 
-            foreach ($query as $prod) {
-                $prod_title = $prod['post_title'];
-                $prod_slug = $prod['post_name'];
-                $sku = get_post_meta($prod['ID'], 'sku', true);
-                $download_sku = get_post_meta($prod['ID'], 'download_sku', true);
+                foreach ($query as $prod) {
+                    $prod_title = $prod['post_title'];
+                    $prod_slug = $prod['post_name'];
+                    $sku = get_post_meta($prod['ID'], 'sku', true);
+                    $download_sku = get_post_meta($prod['ID'], 'download_sku', true);
 
-                if ($prod_title && ($sku == $download_sku || !preg_match('/(DVD|USB|MAK)/', $prod_title))) {
-                    echo '<option class="form-control" value="' . esc_attr($prod_slug) . '">' . esc_html($prod_title) . '</option>';
+                    if ($prod_title && ($sku == $download_sku || !preg_match('/(DVD|USB|MAK)/', $prod_title))) {
+                        echo '<option class="form-control" value="' . esc_attr($prod_slug) . '">' . esc_html($prod_title) . '</option>';
+                    }
                 }
+            } else {
+                    // term_id is 0, so no products found
+                    echo '<option class="form-control" value="">' . esc_html__('No products found', 'hello-elementor-child') . '</option>';
             }
             ?>
         </select>
