@@ -208,6 +208,9 @@ function kb_dropdown_categories($atts) {
         case 'pt-pt':
             $software = "Programa";
             break;
+        case 'pt-br':
+            $software = "Programa";
+            break;    
         case 'es':
             $software = "Programa";
             break;
