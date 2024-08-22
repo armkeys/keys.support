@@ -37,6 +37,7 @@ $installation_labels = [
     'fr' => "Guide d'installation",
     'it' => "Guida d'installazione",
     'pt-pt' => "Guia de instalação",
+    'pt-br' => "Guia de instalação",
     'es' => "Guía de instalación",
     'tr' => "Yükleme Rehberi",
     'cs' => "Průvodce instalací",
@@ -73,6 +74,7 @@ $installation_label = $installation_labels[$lang] ?? $installation_labels['en'];
                               'it' => "Nessun dato trovato per la categoria selezionata",
                               'es' => "No se encontraron datos para la categoría seleccionada",
                               'pt-pt' => "Nenhum dado encontrado para a categoria selecionada",
+                              'pt-br' => "Não foram encontrados dados para a categoria selecionada",
                               'cs' => "Pro vybranou kategorii nebyla nalezena žádná data",
                               'tr' => "Seçilen Kategori için veri bulunamadı",
                               'sk' => "Pre vybratú kategóriu sa nenašli žiadne údaje",
@@ -147,6 +149,7 @@ $installation_label = $installation_labels[$lang] ?? $installation_labels['en'];
                                       'it' => ['64-bit' => 'Scarica 64-bit', '32-bit' => 'Scarica 32-bit'],
                                       'es' => ['64-bit' => 'Descargar 64-bit', '32-bit' => 'Descargar 32-bit'],
                                       'pt-pt' => ['64-bit' => 'Download 64-bit', '32-bit' => 'Download 32-bit'],
+                                      'pt-br' => ['64-bit' => 'Download 64-bit', '32-bit' => 'Download 32-bit'],
                                       'cs' => ['64-bit' => 'Stažení 64-bit', '32-bit' => 'Stažení 32-bit'],
                                       'tr' => ['64-bit' => 'İndirmek 64-bit', '32-bit' => 'İndirmek 32-bit'],
                                       'sk' => ['64-bit' => 'Stiahnite si 64-bit', '32-bit' => 'Stiahnite si 32-bit'],
@@ -241,6 +244,7 @@ $search_terms = [
     'fr' => 'centre-de-telechargement',
     'es' => 'centro-de-descargas',
     'pt-pt' => 'centro-de-download',
+    'pt-br' => 'centro-de-download',
     'it' => 'centro-download',
     'el' => 'κέντρο-λήψης',
     'cs' => 'centrum-stahovani',
@@ -312,6 +316,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     case 'pt-pt':
                         label = 'Língua';
                         break;
+                    case 'pt-br':
+                        label = 'Língua';
+                        break;  
                     case 'es':
                         label = 'Idioma';
                         break;
