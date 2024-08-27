@@ -181,7 +181,6 @@ $installation_label = $installation_labels[$lang] ?? $installation_labels['en'];
 
                                   <?php if (!empty($data['download_link_32'])) { ?>
                                         <a href="<?php echo $data['download_link_32']; ?>" target="_blank" class="download-btn whitespace--normal system-32-bit-button">
-                                            <?php echo esc_html($data['download_label_1']); ?>
                                             <?php 
                                             if(!empty($data['download_label_1'])){
                                                 echo esc_html($data['download_label_1']);

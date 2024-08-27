@@ -15,17 +15,17 @@ jQuery(document).ready(function ($){
 	var system = jQuery("select.system-filter-download").val();
 
 	// Hide all elements by default
-	jQuery(".system-64-bit-label, .system-64-bit-button, .system-32-bit-label, .system-32-bit-button").hide();
+	// jQuery(".system-64-bit-label, .system-64-bit-button, .system-32-bit-label, .system-32-bit-button").hide();
 
 	// Show the relevant elements based on the selected system
-	if (system === "64-bit") {
-		jQuery(".system-64-bit-label, .system-64-bit-button").show();
-	} else if (system === "32-bit") {
-		jQuery(".system-32-bit-label, .system-32-bit-button").show();
-	} else {
-		// Default case
-		jQuery(".system-64-bit-label, .system-64-bit-button").show();
-	}
+	// if (system === "64-bit") {
+	// 	jQuery(".system-64-bit-label, .system-64-bit-button").show();
+	// } else if (system === "32-bit") {
+	// 	jQuery(".system-32-bit-label, .system-32-bit-button").show();
+	// } else {
+	// 	// Default case
+	// 	jQuery(".system-64-bit-label, .system-64-bit-button").show();
+	// }
 
 
 	jQuery('#category-filter-download').on('change', function () {
