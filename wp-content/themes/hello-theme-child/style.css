@@ -85,7 +85,8 @@ Tags: flexible-header, custom-colors, custom-menu, custom-logo, editor-style, fe
     text-align: center;
     transition: all .4s ease;
 }
-.download-center-template .additional-download-button{
+.download-center-template .additional-download-button,
+.download-center-template .system-32-bit-button{
     margin-top: 13px;
 }
 .download-center-template .col-2-color {
@@ -149,7 +150,7 @@ Tags: flexible-header, custom-colors, custom-menu, custom-logo, editor-style, fe
     padding: 10px;
     border-radius: .25rem;
 }
-.download-center-template .system-32-bit-button,
+/* .download-center-template .system-32-bit-button, */
 .download-center-template .descr_32 {
     display: none;
 }
@@ -213,5 +214,12 @@ Tags: flexible-header, custom-colors, custom-menu, custom-logo, editor-style, fe
     }
     .download-center-template .wpml-ls-legacy-dropdown {
         width: 100% !important;
+    }
+}
+
+@media screen and (max-width: 376px) {
+    .download-center-template .download-btn {
+        padding: 10px 15px 8px;
+        line-height: 16px;
     }
 }
