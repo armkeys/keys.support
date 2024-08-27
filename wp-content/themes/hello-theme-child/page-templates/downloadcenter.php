@@ -12,8 +12,12 @@ $fields = [
     "sku",
     "description_32",
     "description_64",
+    "download_label_1",
     "download_link_32",
+    "download_label_2",
     "download_link_64",
+    "additional_download_label",
+    "additional_download_link",
     "installation_guide",
     "installation_video",
     "image_url",
@@ -156,14 +160,44 @@ $installation_label = $installation_labels[$lang] ?? $installation_labels['en'];
                                       'be' => ['64-bit' => 'Downloaden 64-bit', '32-bit' => 'Downloaden 32-bit']
                                   ];
 
-                                  if (isset($download_texts[$lang])) {
+                                //   var_dump($data);
+
+                                 if (isset($download_texts[$lang])) {
                                       $texts = $download_texts[$lang];
-                                      if (!empty($data['download_link_64'])) { ?>
-                                      <a href="<?php echo $data['download_link_64']; ?>" target="_blank" class="download-btn whitespace--normal system-64-bit-button"><?php echo esc_html($texts['64-bit']); ?></a>
+                                 ?>
+
+                                 <?php if (!empty($data['download_link_64'])) { ?>
+                                        <a href="<?php echo $data['download_link_64']; ?>" target="_blank" class="download-btn whitespace--normal system-64-bit-button">
+                                            <?php 
+                                            if(!empty($data['download_label_2'])){
+                                                echo esc_html($data['download_label_2']);
+                                            }
+                                            else{
+                                                echo $data['description_64'];
+                                            }
+                                            ?>
+                                        </a>
                                   <?php } ?>
+
                                   <?php if (!empty($data['download_link_32'])) { ?>
-                                      <a href="<?php echo $data['download_link_32']; ?>" target="_blank" class="download-btn whitespace--normal system-32-bit-button"><?php echo esc_html($texts['32-bit']); ?></a>
-                                  <?php }} ?>
+                                        <a href="<?php echo $data['download_link_32']; ?>" target="_blank" class="download-btn whitespace--normal system-32-bit-button">
+                                            <?php echo esc_html($data['download_label_1']); ?>
+                                            <?php 
+                                            if(!empty($data['download_label_1'])){
+                                                echo esc_html($data['download_label_1']);
+                                            }
+                                            else{
+                                                echo $data['description_32'];
+                                            }
+                                            ?>
+                                        </a>
+                                  <?php } ?>
+
+                                  <?php if (!empty($data['additional_download_link'])) { ?>
+                                      <a href="<?php echo $data['additional_download_link']; ?>" target="_blank" class="download-btn whitespace--normal additional-download-button"><?php echo esc_html($data['additional_download_label']); ?></a>
+                                  <?php } ?>
+
+                                  <?php } ?>
                           </div>
                       </div>
                       <?php if (!empty($data['installation_guide'])) { ?>

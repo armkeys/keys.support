@@ -85,6 +85,9 @@ Tags: flexible-header, custom-colors, custom-menu, custom-logo, editor-style, fe
     text-align: center;
     transition: all .4s ease;
 }
+.download-center-template .additional-download-button{
+    margin-top: 13px;
+}
 .download-center-template .col-2-color {
     border-style: solid;
     border-color: #BF3535;
