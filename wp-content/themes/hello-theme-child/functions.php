@@ -290,14 +290,14 @@ function kb_dropdown_categories($atts) {
         </select>
     </div>
 
-    <div class="form-group">
+    <!-- <div class="form-group">
         <select id="system-filter-download" class="form-control btn-outline-danger system-filter-download">
             <option class="form-control 64-bit-text">64-bit</option>
             <option class="form-control"></option>
             <option class="form-control 32-bit-text">32-bit</option>
             <option class="form-control 64-bit-text">64-bit</option>
         </select>
-    </div>
+    </div> -->
 
     <div class="col-md-12" style="padding-right:0 !important;padding-left:0 !important;">
         <button type="button" class="btn btn-danger btn-block" data-toggle="modal" data-target="#searchModalCenter"><?php echo esc_html($labels['search_by_sku']); ?></button>
