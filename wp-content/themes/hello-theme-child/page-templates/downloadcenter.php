@@ -54,7 +54,7 @@ $installation_label = $installation_labels[$lang] ?? $installation_labels['en'];
 
 ?>
 
-<div class="container download-center-template"><!--start of root element -->
+<div class="container download-center-template" base-url="<?php echo home_url(); ?>"><!--start of root element -->
       <div class="container">
           <div class="row">
               <div class="col-md-12">
