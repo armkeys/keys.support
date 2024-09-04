@@ -2,6 +2,8 @@
 
 jQuery(document).ready(function ($){
 	
+	let baseUrl = document.querySelector('[base-url]').getAttribute('base-url');
+
 	/*Download center*/
 	var ur = window.location.href;
 	var downloadKeywords = ['/en/download-center/', '/download-centrum/', '/centre-de-telechargement/', '/κέντρο-λήψης/', '/centro-download/', '/centro-de-download/', '/centro-de-descargas/', '/centrum-stahovani/', '/indirme-merkezi/', '/downloadcentrum/'];
@@ -90,14 +92,17 @@ jQuery(document).ready(function ($){
 		let url = window.location.toString();
 		let langUrl;
 	
-		for (let i = 0; i < languageCodes.length; i++) {
-			let langCode = languageCodes[i];
-			if (url.includes('/' + langCode + '/')) {
-				langUrl = "https://keys.support/" + langCode + "/product/" + slug + "/?slug=" + slug;
-				window.open(langUrl, "_self", 'slug=' + slug);
-				break;
-			}
-		}
+		langUrl = baseUrl + "/product/" + slug + "/?slug=" + slug;
+		window.open(langUrl, "_self", 'slug=' + slug);
+
+		// for (let i = 0; i < languageCodes.length; i++) {
+		// 	let langCode = languageCodes[i];
+		// 	if (url.includes('/' + langCode + '/')) {
+		// 		langUrl = baseUrl + langCode + "/product/" + slug + "/?slug=" + slug;
+		// 		window.open(langUrl, "_self", 'slug=' + slug);
+		// 		break;
+		// 	}
+		// }
 	});
 
 	jQuery('select.system-filter-download').on('change', function(){
