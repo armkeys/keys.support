@@ -173,7 +173,7 @@ $installation_label = $installation_labels[$lang] ?? $installation_labels['en'];
                                                 echo esc_html($data['download_label_2']);
                                             }
                                             else{
-                                                echo $data['description_64'];
+                                                echo strip_tags($data['description_64']) . ' 64-bit';
                                             }
                                             ?>
                                         </a>
@@ -186,7 +186,7 @@ $installation_label = $installation_labels[$lang] ?? $installation_labels['en'];
                                                 echo esc_html($data['download_label_1']);
                                             }
                                             else{
-                                                echo $data['description_32'];
+                                                echo strip_tags($data['description_32']) . ' 32-bit';
                                             }
                                             ?>
                                         </a>
