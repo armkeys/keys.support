@@ -32,6 +32,11 @@ function hello_elementor_child_enqueue_scripts() {
 	);
 	wp_enqueue_script ( 'hello-theme-custom-script' );	
 
+     // Pass the base URL to the script
+     wp_localize_script('hello-theme-custom-script', 'helloScriptVars', array(
+        'baseUrl' => get_site_url(), // or use home_url()
+    ));
+
 	//Bootstrap CSS
 	wp_enqueue_style( 'bootstrap-style', get_stylesheet_directory_uri() . '/bootstrap/bootstrap.min.css', array(), time() );
 	//Bootstrap JS
