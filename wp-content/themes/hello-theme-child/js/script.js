@@ -2,7 +2,7 @@
 
 jQuery(document).ready(function ($){
 	
-	let baseUrl = document.querySelector('[base-url]').getAttribute('base-url');
+	let baseUrl = helloScriptVars.baseUrl;
 
 	/*Download center*/
 	var ur = window.location.href;
