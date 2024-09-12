@@ -236,6 +236,9 @@ $installation_label = $installation_labels[$lang] ?? $installation_labels['en'];
               <?php } ?>
           </div>
 
+          <?php 
+           include_once 'bestseller.php';           
+          ?>
           <!-- Modal -->
           <div class="modal fade" id="notFoundModalCenter" tabindex="-1" role="dialog" aria-labelledby="notFoundModalCenter" aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered" role="document">
