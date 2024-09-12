@@ -149,7 +149,7 @@ $bestseller[] = array(
     <div class="column">
     <a href="<?php echo $data['url']; ?>"><img src="<?php echo $data['image']; ?>" /></a>
         <p><?php echo $data['product_name']; ?></p>
-        <!-- <p class="price"><?php echo ($currency=="eur") ? $data['price'][0] : $data['price'][1] ; ?></p> -->
+        <p class="price"><?php echo ($currency=="eur") ? $data['price'][0] : $data['price'][1] ; ?></p>
         <a href="<?php echo $data['url']; ?>"><button type="button" class="btn btn-danger btn-block"><?php echo $btn_text; ?></button></a>
     </div>
     <?php endforeach; ?>
