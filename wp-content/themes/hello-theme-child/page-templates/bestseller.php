@@ -11,7 +11,7 @@ switch ($lang) {
         break;
     case 'de':
         $store_lang_url = "DE";
-        $title = "Bitte schauen Sie sich unseren Bestseller an";
+        $title = "Bitte schauen Sie sich unsere Bestseller an";
         $btn_text = "Jetzt kaufen";
         $currency = "eur";
         break;
