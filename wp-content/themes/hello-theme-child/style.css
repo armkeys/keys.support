@@ -214,6 +214,12 @@ Tags: flexible-header, custom-colors, custom-menu, custom-logo, editor-style, fe
     }
 }
 
+@media (min-width: 1200px) {
+    .download-center-template,
+    .download-center-template .container {
+        max-width: 1480px !important;
+    }
+}
 @media screen and (max-width: 810px) {
     .download-center-template .container {
         margin: 50px auto;
