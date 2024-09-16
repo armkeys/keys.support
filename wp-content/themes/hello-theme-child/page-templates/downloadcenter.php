@@ -100,7 +100,7 @@ $installation_label = $installation_labels[$lang] ?? $installation_labels['en'];
           <?php } ?>
           <!-- End: alert when category not found -->
           <div class="row">
-              <div class="col-md-6 col-sm-12">
+              <div class="col-md-4 col-sm-12">
                   <?php 
                   echo '<div class="lang-switcher">';
                     echo do_shortcode('[wpml_language_switcher type="widget" flags=1 native=1 translated=0][/wpml_language_switcher]');
@@ -113,7 +113,7 @@ $installation_label = $installation_labels[$lang] ?? $installation_labels['en'];
               </div>
 
               <?php if (empty($data['sku']) && empty($data['description_32']) && empty($data['download_link_32']) && empty($data['installation_guide']) && empty($data['installation_video'])) { ?>
-                  <div class="col-md-6 col-sm-12">
+                  <div class="col-md-4 col-sm-12">
                       <div class="download-software-wrapper custom-success-bg">
                           <div class="row">
                               <div class="col-sm-12">
@@ -123,10 +123,10 @@ $installation_label = $installation_labels[$lang] ?? $installation_labels['en'];
                       </div>
                   </div>
               <?php } else { ?>
-                  <div class="col-md-6 col-sm-12 col-2-color">
+                  <div class="col-md-4 col-sm-12 col-2-color">
                       <div class="row">
                           <div class="col-md-6 product-image">
-                              <img src="<?php echo $data['image_url'] ?: 'https://via.placeholder.com/252/dc3545/FFFFFF/?text=No%20Image%20Available'; ?>" alt="Product Image" width="252" height="252" loading="lazy">
+                              <img src="<?php echo $data['image_url'] ?: 'https://via.placeholder.com/252/dc3545/FFFFFF/?text=No%20Image%20Available'; ?>" alt="Product Image" width="200" height="200" loading="lazy">
                           </div>
                           <div class="col-md-6 col-sm-12">
                               <div class="download-software-description descr_64">
@@ -143,99 +143,105 @@ $installation_label = $installation_labels[$lang] ?? $installation_labels['en'];
                           </div>
                       </div>
                       <div class="row">
-                          <div class="col download-col">
-                              <?php
-                                  $download_texts = [
-                                      'en' => ['64-bit' => 'Download 64-bit', '32-bit' => 'Download 32-bit'],
-                                      'de' => ['64-bit' => 'Herunterladen 64-bit', '32-bit' => 'Herunterladen 32-bit'],
-                                      'fr' => ['64-bit' => 'Téléchargement 64-bit', '32-bit' => 'Téléchargement 32-bit'],
-                                      'el' => ['64-bit' => 'Κατεβάστε 64-bit', '32-bit' => 'Κατεβάστε 32-bit'],
-                                      'it' => ['64-bit' => 'Scarica 64-bit', '32-bit' => 'Scarica 32-bit'],
-                                      'es' => ['64-bit' => 'Descargar 64-bit', '32-bit' => 'Descargar 32-bit'],
-                                      'pt-pt' => ['64-bit' => 'Download 64-bit', '32-bit' => 'Download 32-bit'],
-                                      'pt-br' => ['64-bit' => 'Download 64-bit', '32-bit' => 'Download 32-bit'],
-                                      'cs' => ['64-bit' => 'Stažení 64-bit', '32-bit' => 'Stažení 32-bit'],
-                                      'tr' => ['64-bit' => 'İndirmek 64-bit', '32-bit' => 'İndirmek 32-bit'],
-                                      'sk' => ['64-bit' => 'Stiahnite si 64-bit', '32-bit' => 'Stiahnite si 32-bit'],
-                                      'be' => ['64-bit' => 'Downloaden 64-bit', '32-bit' => 'Downloaden 32-bit']
-                                  ];
-
-                                //   var_dump($data);
-
-                                 if (isset($download_texts[$lang])) {
-                                      $texts = $download_texts[$lang];
-                                 ?>
-
-                                 <?php if (!empty($data['download_link_64'])) { ?>
-                                        <a href="<?php echo $data['download_link_64']; ?>" target="_blank" class="download-btn whitespace--normal system-64-bit-button">
-                                            <?php 
-                                            if(!empty($data['download_label_2'])){
-                                                echo esc_html($data['download_label_2']);
-                                            }
-                                            else{
-                                                echo strip_tags($data['description_64']) . ' 64-bit';
-                                            }
-                                            ?>
-                                        </a>
-                                  <?php } ?>
-
-                                  <?php if (!empty($data['download_link_32'])) { ?>
-                                        <a href="<?php echo $data['download_link_32']; ?>" target="_blank" class="download-btn whitespace--normal system-32-bit-button">
-                                            <?php 
-                                            if(!empty($data['download_label_1'])){
-                                                echo esc_html($data['download_label_1']);
-                                            }
-                                            else{
-                                                echo strip_tags($data['description_32']) . ' 32-bit';
-                                            }
-                                            ?>
-                                        </a>
-                                  <?php } ?>
-
-                                  <?php if (!empty($data['additional_download_link'])) { ?>
-                                      <a href="<?php echo $data['additional_download_link']; ?>" target="_blank" class="download-btn whitespace--normal additional-download-button"><?php echo esc_html($data['additional_download_label']); ?></a>
-                                  <?php } ?>
-
-                                  <?php } ?>
-                          </div>
-                      </div>
-                      <?php if (!empty($data['installation_guide'])) { ?>
-                          <div id="desktop">
-                              <div class="row">
-                                  <div class="col installation-col">
-                                      <a href="<?php echo home_url() . "installation-guide/?id=" . $data['installation_guide']; ?>" target="_blank" class="installation-btn whitespace--normal">
-                                          <i aria-hidden="true" class="fas fa-file-alt"></i>&nbsp;<?php echo $installation_label; ?>
-                                      </a>
-                                  </div>
-                              </div>
-                          </div>
-                          <div id="mobile">
-                              <div class="row">
-                                  <div class="col installation-col-mobile">
-                                      <a href="<?php echo home_url() . "installation-guide/?id=" . $data['installation_guide']; ?>" target="_blank" class="installation-btn whitespace--normal">
-                                          <i aria-hidden="true" class="fas fa-file-alt"></i>&nbsp;<?php echo $installation_label; ?>
-                                      </a>
-                                  </div>
-                              </div>
-                              <div class="row">
-                                  <div class="col installation-col-mobile">
-                                      <a href="<?php echo $data['installation_video']; ?>" target="_blank" class="installation-btn whitespace--normal">
-                                          <i aria-hidden="true" class="far fa-play-circle"></i>Installation video
-                                      </a>
-                                  </div>
-                              </div>
-                          </div>
-                      <?php } ?>
-                      <br/>
-                      <div class="row">
                           <div class="col">
+                            <?php if(!empty($data['note'])): ?>
                               <p><?php echo $data['note']; ?></p>
+                            <?php endif; ?>
                           </div>
                       </div>
                   </div>
               <?php } ?>
+              <div class="col-md-4 col-sm-12">
+              <div class="row">
+                    `<div class="col download-col">
+                        <?php
+                            $download_texts = [
+                                'en' => ['64-bit' => 'Download 64-bit', '32-bit' => 'Download 32-bit'],
+                                'de' => ['64-bit' => 'Herunterladen 64-bit', '32-bit' => 'Herunterladen 32-bit'],
+                                'fr' => ['64-bit' => 'Téléchargement 64-bit', '32-bit' => 'Téléchargement 32-bit'],
+                                'el' => ['64-bit' => 'Κατεβάστε 64-bit', '32-bit' => 'Κατεβάστε 32-bit'],
+                                'it' => ['64-bit' => 'Scarica 64-bit', '32-bit' => 'Scarica 32-bit'],
+                                'es' => ['64-bit' => 'Descargar 64-bit', '32-bit' => 'Descargar 32-bit'],
+                                'pt-pt' => ['64-bit' => 'Download 64-bit', '32-bit' => 'Download 32-bit'],
+                                'pt-br' => ['64-bit' => 'Download 64-bit', '32-bit' => 'Download 32-bit'],
+                                'cs' => ['64-bit' => 'Stažení 64-bit', '32-bit' => 'Stažení 32-bit'],
+                                'tr' => ['64-bit' => 'İndirmek 64-bit', '32-bit' => 'İndirmek 32-bit'],
+                                'sk' => ['64-bit' => 'Stiahnite si 64-bit', '32-bit' => 'Stiahnite si 32-bit'],
+                                'be' => ['64-bit' => 'Downloaden 64-bit', '32-bit' => 'Downloaden 32-bit']
+                            ];
+
+                        //   var_dump($data);
+
+                            if (isset($download_texts[$lang])) {
+                                $texts = $download_texts[$lang];
+                            ?>
+
+                            <?php if (!empty($data['download_link_64'])) { ?>
+                                <a href="<?php echo $data['download_link_64']; ?>" target="_blank" class="download-btn whitespace--normal system-64-bit-button">
+                                    <?php 
+                                    if(!empty($data['download_label_2'])){
+                                        echo esc_html($data['download_label_2']);
+                                    }
+                                    else{
+                                        echo strip_tags($data['description_64']) . ' 64-bit';
+                                    }
+                                    ?>
+                                </a>
+                            <?php } ?>
+
+                            <?php if (!empty($data['download_link_32'])) { ?>
+                                <a href="<?php echo $data['download_link_32']; ?>" target="_blank" class="download-btn whitespace--normal system-32-bit-button">
+                                    <?php 
+                                    if(!empty($data['download_label_1'])){
+                                        echo esc_html($data['download_label_1']);
+                                    }
+                                    else{
+                                        echo strip_tags($data['description_32']) . ' 32-bit';
+                                    }
+                                    ?>
+                                </a>
+                            <?php } ?>
+
+                            <?php if (!empty($data['additional_download_link'])) { ?>
+                                <a href="<?php echo $data['additional_download_link']; ?>" target="_blank" class="download-btn whitespace--normal additional-download-button"><?php echo esc_html($data['additional_download_label']); ?></a>
+                            <?php } ?>
+
+                            <?php } ?>
+                    </div>
+                </div>
+                <?php if (!empty($data['installation_guide'])) { ?>
+                    <div id="desktop">
+                        <div class="row">
+                            <div class="col installation-col">
+                                <a href="<?php echo home_url() . "installation-guide/?id=" . $data['installation_guide']; ?>" target="_blank" class="installation-btn whitespace--normal">
+                                    <i aria-hidden="true" class="fas fa-file-alt"></i>&nbsp;<?php echo $installation_label; ?>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="mobile">
+                        <div class="row">
+                            <div class="col installation-col-mobile">
+                                <a href="<?php echo home_url() . "installation-guide/?id=" . $data['installation_guide']; ?>" target="_blank" class="installation-btn whitespace--normal">
+                                    <i aria-hidden="true" class="fas fa-file-alt"></i>&nbsp;<?php echo $installation_label; ?>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col installation-col-mobile">
+                                <a href="<?php echo $data['installation_video']; ?>" target="_blank" class="installation-btn whitespace--normal">
+                                    <i aria-hidden="true" class="far fa-play-circle"></i>Installation video
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                <?php } ?>
+              </div>
           </div>
 
+          <?php 
+           include_once 'bestseller.php';           
+          ?>
           <!-- Modal -->
           <div class="modal fade" id="notFoundModalCenter" tabindex="-1" role="dialog" aria-labelledby="notFoundModalCenter" aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered" role="document">
