@@ -175,6 +175,52 @@ Tags: flexible-header, custom-colors, custom-menu, custom-logo, editor-style, fe
 .download-center-template .wpml-ls-sidebars-.wpml-ls.wpml-ls-legacy-dropdown.js-wpml-ls-legacy-dropdown {
     margin-bottom: 1rem;
 }
+#best_seller{
+    padding-top: 40px;
+}
+#best_seller h3{
+    text-align: center;
+    margin: 20px auto 40px;
+}
+
+#best_seller .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Optional spacing between columns */
+    margin-bottom: 10px;
+}
+
+#best_seller .column {
+    flex: 1 1 calc(25% - 20px); /* 25% width minus the gap */
+    box-sizing: border-box;
+    padding: 10px;
+    text-align: center;
+}
+#best_seller .price{
+    color: red;
+}
+#best_seller a:hover{
+    text-decoration: none;
+}
+@media (max-width: 768px) {
+    #best_seller .column {
+        flex: 1 1 calc(50% - 20px); /* On smaller screens, 2 columns */
+    }
+}
+
+@media (max-width: 480px) {
+    #best_seller .column {
+        flex: 1 1 100%; /* On very small screens, 1 column */
+    }
+}
+
+@media (min-width: 1200px) {
+    .download-center-template,
+    .download-center-template .container {
+        max-width: 1480px !important;
+    }
+}
+
 @media screen and (max-width: 810px) {
     .download-center-template .container {
         margin: 50px auto;
