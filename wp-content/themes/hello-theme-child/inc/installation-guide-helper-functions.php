@@ -176,7 +176,7 @@ function ksig_register_setting(){
 
          add_settings_field(
             'kscontact_number_it',
-            'Numéro de contact (IT)',
+            'Numero di contatto (IT)',
             'kscontact_number_text_callback_it', // function which prints the field
             'ksinstallation_guide_settings', // page slug
             'ksinstallation_guide_section_it', // section ID
@@ -188,7 +188,7 @@ function ksig_register_setting(){
 
         add_settings_field(
             'kscompany_email_it',
-            "E-mail de l'entreprise (IT)",
+            "E-mail aziendale (IT)",
             'kscompany_email_text_callback_it', // function which prints the field
             'ksinstallation_guide_settings', // page slug
             'ksinstallation_guide_section_it', // section ID
@@ -200,7 +200,7 @@ function ksig_register_setting(){
 
         add_settings_field(
             'kscompany_website_it',
-            "Site Web d'entreprise (IT)",
+            "Sito web aziendale (IT)",
             'kscompany_website_text_callback_it', // function which prints the field
             'ksinstallation_guide_settings', // page slug
             'ksinstallation_guide_section_it', // section ID
@@ -220,7 +220,7 @@ function ksig_register_setting(){
 
          add_settings_field(
             'kscontact_number_es',
-            'Numéro de contact (ES)',
+            'Numéro de contacto (ES)',
             'kscontact_number_text_callback_es', // function which prints the field
             'ksinstallation_guide_settings', // page slug
             'ksinstallation_guide_section_es', // section ID
@@ -232,7 +232,7 @@ function ksig_register_setting(){
 
         add_settings_field(
             'kscompany_email_es',
-            "E-mail de l'entreprise (ES)",
+            "Correo electrónico de la empresa (ES)",
             'kscompany_email_text_callback_es', // function which prints the field
             'ksinstallation_guide_settings', // page slug
             'ksinstallation_guide_section_es', // section ID
@@ -244,7 +244,7 @@ function ksig_register_setting(){
 
         add_settings_field(
             'kscompany_website_es',
-            "Site Web d'entreprise (ES)",
+            "Sitio web de la empresa (ES)",
             'kscompany_website_text_callback_es', // function which prints the field
             'ksinstallation_guide_settings', // page slug
             'ksinstallation_guide_section_es', // section ID
@@ -288,7 +288,7 @@ function ksig_register_setting(){
 
         add_settings_field(
             'kscompany_website_pt',
-            "Site Web d'entreprise (PT)",
+            "Site da empresa (PT)",
             'kscompany_website_text_callback_pt', // function which prints the field
             'ksinstallation_guide_settings', // page slug
             'ksinstallation_guide_section_pt', // section ID
@@ -308,7 +308,7 @@ function ksig_register_setting(){
 
          add_settings_field(
             'kscontact_number_sk',
-            'Numéro de contact (SK)',
+            'Kontaktné číslo (SK)',
             'kscontact_number_text_callback_sk', // function which prints the field
             'ksinstallation_guide_settings', // page slug
             'ksinstallation_guide_section_sk', // section ID
@@ -338,6 +338,50 @@ function ksig_register_setting(){
             'ksinstallation_guide_section_sk', // section ID
             array( 
                 'label_for' => 'Company Website SK' ,
+                'class' => 'ksig-installation-guide-details-class', // for <tr> element
+            )
+        );
+
+        //BE
+        add_settings_section(
+            'ksinstallation_guide_section_be', // section ID
+            __( '', 'ksig-installation-guide' ), // title (if needed)
+            'ksinstallation_guide_section_callback', // callback function (if needed)
+            'ksinstallation_guide_settings' // page slug
+        );
+
+         add_settings_field(
+            'kscontact_number_be',
+            'Numéro de contact (BE)',
+            'kscontact_number_text_callback_be', // function which prints the field
+            'ksinstallation_guide_settings', // page slug
+            'ksinstallation_guide_section_be', // section ID
+            array( 
+                'label_for' =>'Contact Number BE' ,
+                'class' => 'ksig-installation-guide-contact-number', // for <tr> element
+            )
+        );
+
+        add_settings_field(
+            'kscompany_email_be',
+            "E-mail de l'entreprise (BE)",
+            'kscompany_email_text_callback_be', // function which prints the field
+            'ksinstallation_guide_settings', // page slug
+            'ksinstallation_guide_section_be', // section ID
+            array( 
+                'label_for' => 'Company Email BE',
+                'class' => 'ksig-installation-guide-details-class', // for <tr> element
+            )
+        );
+
+        add_settings_field(
+            'kscompany_website_be',
+            "Site Web d'entreprise (BE)",
+            'kscompany_website_text_callback_be', // function which prints the field
+            'ksinstallation_guide_settings', // page slug
+            'ksinstallation_guide_section_be', // section ID
+            array( 
+                'label_for' => 'Company Website BE' ,
                 'class' => 'ksig-installation-guide-details-class', // for <tr> element
             )
         );
@@ -598,4 +642,38 @@ function kscompany_website_text_callback_sk() {
         $options['kscompany_website_sk'] = '';
     }
     echo '<input type="text" id="ksinstallation_guide_settings[kscompany_website_sk]" name="ksinstallation_guide_settings[kscompany_website_sk]" value="'. $options['kscompany_website_sk'] . '" />';
+}
+
+//BE
+function kscontact_number_text_callback_be() {
+
+    $options = get_option('ksinstallation_guide_settings',array());
+
+    if ( !isset( $options['kscontact_number_be'] ) ) {
+        $options['kscontact_numbe_be'] = '';
+    }
+  echo '<style>  tr.ksig-installation-guide-contact-number {border-top: 1px solid lightgray;}</style>';
+  echo '<input type="text" id="ksinstallation_guide_settings[kscontact_numbe_be]" name="ksinstallation_guide_settings[kscontact_number_be]" value="'.  $options["kscontact_number_be"]  .'" />';
+}
+
+function kscompany_email_text_callback_be() {
+
+    $options = get_option('ksinstallation_guide_settings',array());
+
+    if ( !isset( $options['kscompany_email_be'] ) ) {
+        $options['kscompany_email_be'] = '';
+    }
+    echo '<input type="text" id="ksinstallation_guide_settings[kscompany_email_be]" name="ksinstallation_guide_settings[kscompany_email_be]" value="' . $options['kscompany_email_be'] .'" />';
+
+
+}
+
+function kscompany_website_text_callback_be() {
+
+    $options = get_option('ksinstallation_guide_settings',array());
+
+    if ( !isset( $options['kscompany_website_be'] ) ) {
+        $options['kscompany_website_be'] = '';
+    }
+    echo '<input type="text" id="ksinstallation_guide_settings[kscompany_website_be]" name="ksinstallation_guide_settings[kscompany_website_be]" value="'. $options['kscompany_website_be'] . '" />';
 }
