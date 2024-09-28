@@ -255,6 +255,7 @@ if($_GET['id'] != null){
 
   }
 
+
   $options = get_option('ksinstallation_guide_settings', array());
 
   // Define default values for email and phone
@@ -460,7 +461,7 @@ span.fa  {
 
         // Get the base URL of the site
         //$base_url = home_url();
-        $base_url = "http://localhost/keysupport";
+        $base_url = "https://keysupport";
 
         foreach ($languages as $lang_code => $lang_name) {
             // Construct the slug dynamically based on the SKU and language code
