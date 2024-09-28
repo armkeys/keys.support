@@ -46,56 +46,215 @@ if($_GET['id'] != null){
     }
  
     $installation = get_post($get_id); 
-    $title = $installation->post_title;
-    $external_url = get_field("installation_external_url", $get_id);
+    
+    if ($installation) {
+        $title = $installation->post_title;
+        $external_url = get_field("installation_external_url", $get_id);
+    
+        if($external_url == null){
+            $content = wpautop($installation->post_content);
+            $video_url = get_field("installation_video_url", $_GET['id']);
+        } else {
+            $content = $external_url;
+            $video_url = null;
+        }
+    } else {
+        // Handle case where the installation is not found
+        echo '
+        <div class="modal fade" id="installationNotFoundModal" tabindex="-1" role="dialog" aria-labelledby="installationNotFoundModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="installationNotFoundModalLabel">Notification</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Installation Guide not found
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+            </div>
+        </div>
+        </div>
 
-    if($external_url == null){
-      $content = wpautop($installation->post_content);
-      $video_url = get_field("installation_video_url", $_GET['id']);
-    }else{
-      $content = $external_url;
-      $video_url = null;
-    }    
+        <script type="text/javascript">
+        // Trigger the modal to show
+        jQuery(document).ready(function(){
+            jQuery("#installationNotFoundModal").modal("show");
+        });
+        </script>
+        ';
+
+        // Delay the redirect to allow the user to see the modal
+        echo '
+        <script type="text/javascript">
+        setTimeout(function(){
+            window.location.href = "' . home_url() . '";
+        }, 5000); // Redirects after 5 seconds
+        </script>
+        ';
+
+        // Exit to ensure no further processing
+        exit();
+ 
+    }
 }else{
     // Sanitize SKU input from URL, default to 0 if not provided
     $sku = isset($_GET['sku']) && !empty($_GET['sku']) ? sanitize_text_field($_GET['sku']) : 0;
 
-    if($sku > 0){
-      $query_id = $wpdb->get_var($wpdb->prepare(
-        "SELECT sp.ID 
-        FROM {$table_posts} as sp
-        INNER JOIN {$table_postmeta} as spm ON sp.ID = spm.post_id
-        INNER JOIN {$table_icl_trans} as sit ON sp.ID = sit.element_id
-        WHERE sp.post_type = 'installation'
-        AND spm.meta_key = 'sku'
-        AND spm.meta_value = %s
-        AND sit.language_code = %s
-        LIMIT 1", 
-        $sku, $lang
-      ));
-  
-      $post_id = $query_id;
-      $installation = get_post($post_id); 
-      $title = $installation->post_title;
+    if ($sku > 0) {
+        // First SQL query to search by 'sku'
+        $query_id = $wpdb->get_var($wpdb->prepare(
+            "SELECT sp.ID 
+            FROM {$table_posts} as sp
+            INNER JOIN {$table_postmeta} as spm ON sp.ID = spm.post_id
+            INNER JOIN {$table_icl_trans} as sit ON sp.ID = sit.element_id
+            WHERE sp.post_type = 'installation'
+            AND spm.meta_key = 'sku'
+            AND spm.meta_value = %s
+            AND sit.language_code = %s
+            LIMIT 1", 
+            $sku, $lang
+        ));
+    
+        if ($query_id) {
+            // If SKU is found in the first query
+            $post_id = $query_id;
+            $installation = get_post($post_id); 
+            $title = $installation->post_title;
+        } else {
+            // If no result, search within 'installation_repeater_group'
+            $results = $wpdb->get_results($wpdb->prepare(
+                "SELECT sp.ID, spm.meta_value 
+                FROM {$table_posts} as sp
+                INNER JOIN {$table_postmeta} as spm ON sp.ID = spm.post_id
+                INNER JOIN {$table_icl_trans} as sit ON sp.ID = sit.element_id
+                WHERE sp.post_type = 'installation'
+                AND spm.meta_key = 'installation_repeater_group'
+                AND sit.language_code = %s", 
+                $lang
+            ));
+    
+            $post_id = 0;
+            foreach ($results as $result) {
+                $meta_value = maybe_unserialize($result->meta_value);
+                if (is_array($meta_value)) {
+                    foreach ($meta_value as $group) {
+                        if (isset($group['sku']) && $group['sku'] == $sku) {
+                            $post_id = $result->ID;
+                            break 2; // Exit both loops when found
+                        }
+                    }
+                }
+            }
+    
+            if ($post_id > 0) {
+                $installation = get_post($post_id);
+                $title = $installation->post_title;
+            } else {              
+                // If no results found
+                echo '
+                <div class="modal fade" id="skuNotFoundModal" tabindex="-1" role="dialog" aria-labelledby="skuNotFoundModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="skuNotFoundModalLabel">Notification</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Product SKU not found
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                    </div>
+                </div>
+                </div>
 
-     }else{
-        $post_id = get_the_ID();
-        $installation = get_post($post_id); 
-        $title = $installation->post_title;
-     }
+                <script type="text/javascript">
+                // Trigger the modal to show
+                jQuery(document).ready(function(){
+                    jQuery("#skuNotFoundModal").modal("show");
+                });
+                </script>
+                ';
 
-      $external_url = get_field("installation_external_url", $post_id);
-      $installation_slug = "installation-guide/?sku={$sku}";
-  
-      if($external_url == null){
-        $content = wpautop(get_post_field('post_content', $post_id));
-        $video_url = get_field("installation_video_url", $post_id);
-      }else{
-        $content = $external_url;
-        $video_url = null;
-      }  
+                // Delay the redirect to allow the user to see the modal
+                echo '
+                <script type="text/javascript">
+                setTimeout(function(){
+                    window.location.href = "' . home_url() . '";
+                }, 5000); // Redirects after 5 seconds
+                </script>
+                ';
+
+                // Exit to ensure no further processing
+                exit();
+
+            }
+        }
+    
+        $external_url = get_field("installation_external_url", $post_id);
+        $installation_slug = "installation-guide/?sku={$sku}";
+    
+        if ($external_url == null) {
+            $content = wpautop(get_post_field('post_content', $post_id));
+            $video_url = get_field("installation_video_url", $post_id);
+        } else {
+            $content = $external_url;
+            $video_url = null;
+        }
+    } else {
+        // If no url parameter sku or id
+        echo '
+        <div class="modal fade" id="skuNotFoundModal" tabindex="-1" role="dialog" aria-labelledby="skuNotFoundModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="skuNotFoundModalLabel">Notification</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Product SKU not found
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+            </div>
+        </div>
+        </div>
+
+        <script type="text/javascript">
+        // Trigger the modal to show
+        jQuery(document).ready(function(){
+            jQuery("#skuNotFoundModal").modal("show");
+        });
+        </script>
+        ';
+
+        // Delay the redirect to allow the user to see the modal
+        echo '
+        <script type="text/javascript">
+        setTimeout(function(){
+            window.location.href = "' . home_url() . '";
+        }, 5000); // Redirects after 5 seconds
+        </script>
+        ';
+
+        // Exit to ensure no further processing
+        exit();
+    }
+    
 
   }
+
 
   $options = get_option('ksinstallation_guide_settings', array());
 
@@ -285,7 +444,7 @@ span.fa  {
 
 <?php get_footer(); ?>
 <div class="wpml-ls wpml-ls-legacy-list-horizontal text-center">
-    <ul>
+<ul>
         <?php
         $languages = [
             'de' => 'Deutsch',
@@ -296,21 +455,20 @@ span.fa  {
             'pt-pt' => 'Português',
             'sk' => 'Slovenčina'
         ];
-        
-        $installation_slugs = [
-            'de' => $installation_slug_de,
-            'fr' => $installation_slug_fr,
-            'it' => $installation_slug_it,
-            'en' => $installation_slug_en,
-            'es' => $installation_slug_es,
-            'pt-pt' => $installation_slug_pt,
-            'sk' => $installation_slug_sk
-        ];
+
+        // Get the SKU from the query parameters
+        $sku = isset($_GET['sku']) ? $_GET['sku'] : 'not-found';
+
+        // Get the base URL of the site
+        //$base_url = home_url();
+        $base_url = "https://keysupport";
 
         foreach ($languages as $lang_code => $lang_name) {
-            $slug = $installation_slugs[$lang_code];
-            $flag_url = "https://keys.support/wp-content/plugins/sitepress-multilingual-cms/res/flags/{$lang_code}.png";
-            $url = "https://keys.support/{$lang_code}/{$slug}";
+            // Construct the slug dynamically based on the SKU and language code
+            $slug = "installation-guide/?sku={$sku}";
+            
+            $flag_url = "{$base_url}/wp-content/plugins/sitepress-multilingual-cms/res/flags/{$lang_code}.png";
+            $url = "{$base_url}/{$lang_code}/{$slug}";
             echo "<li class='wpml-ls-slot-footer wpml-ls-item wpml-ls-item-{$lang_code} wpml-ls-item-legacy-list-horizontal'>
                     <a href='{$url}' class='wpml-ls-link'>
                         <img class='wpml-ls-flag' src='{$flag_url}' alt='' width='18' height='12'>

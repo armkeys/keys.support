@@ -391,7 +391,8 @@ function get_post_name() {
     
     // Verify the SKU and language parameters
     if (isset($sku) && isset($lang) && (strlen($sku) == 4 || $sku === "6080-WIN" || strlen($sku) == 6)) {
-        
+
+        // First SQL query to search by 'sku'
         $sql = $wpdb->prepare(
             "SELECT p.ID AS post_id, p.post_name, t.language_code 
             FROM {$wpdb->prefix}postmeta pm 
@@ -406,18 +407,47 @@ function get_post_name() {
 
         $results = $wpdb->get_results($sql, ARRAY_A);
 
-        foreach ($results as $prod) {
-            $software[] = [
-                'prod_id' => $prod['post_id'],
-                'prod_lang' => $prod['language_code'],
-                'prod_slug' => $prod['post_name']
-            ];
+        // Check if results were found
+        if (!empty($results)) {
+            foreach ($results as $prod) {
+                $software[] = [
+                    'prod_id' => $prod['post_id'],
+                    'prod_lang' => $prod['language_code'],
+                    'prod_slug' => $prod['post_name']
+                ];
+            }
+        } else {
+            // If no results found, run a second query using 'download_sku' meta_key
+            $sql_download_sku = $wpdb->prepare(
+                "SELECT p.ID AS post_id, p.post_name, t.language_code 
+                FROM {$wpdb->prefix}postmeta pm 
+                LEFT JOIN {$wpdb->prefix}icl_translations t ON pm.post_id = t.element_id
+                LEFT JOIN {$wpdb->prefix}posts p ON pm.post_id = p.ID
+                WHERE p.post_type = 'product' 
+                AND pm.meta_key = 'download_sku' 
+                AND FIND_IN_SET(%s, pm.meta_value) > 0 
+                AND t.language_code = %s",
+                $sku, $lang
+            );
+
+            $download_sku_results = $wpdb->get_results($sql_download_sku, ARRAY_A);
+
+            if (!empty($download_sku_results)) {
+                foreach ($download_sku_results as $prod) {
+                    $software[] = [
+                        'prod_id' => $prod['post_id'],
+                        'prod_lang' => $prod['language_code'],
+                        'prod_slug' => $prod['post_name']
+                    ];
+                }
+            }
         }
     }
 
     echo json_encode($software);
     wp_die();
 }
+
 
 /*Delete Products for Download center*/
 add_action( 'admin_post_delete_ke_products', 'prefix_admin_delete_ke_products' );
