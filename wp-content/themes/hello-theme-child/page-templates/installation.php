@@ -14,184 +14,334 @@ $table_icl_trans = $wpdb->prefix."icl_translations";
 $installation_slug;
 $status;
 
+
 if($_GET['id'] != null){
-  $get_id = $_GET['id'];
+  $get_id = intval($_GET['id']); 
   $trid = $wpdb->get_var("SELECT trid FROM {$table_icl_trans} WHERE element_id = {$get_id}");
-   $sql = "SELECT * FROM {$table_icl_trans} WHERE trid = {$trid}";
-     $query = $wpdb->get_results($sql,ARRAY_A);
-     foreach($query as $pi){
-       if($pi['language_code'] == 'de'){
-         $eid_de =  $pi['element_id'];
-         $installation_slug_de = "installation-guide/?id={$eid_de}";
-       }elseif($pi['language_code'] == 'es'){
-         $eid_es =  $pi['element_id'];
-         $installation_slug_es = "installation-guide/?id={$eid_es}";
-       }elseif($pi['language_code'] == 'fr'){
-         $eid_fr =  $pi['element_id'];
-         $installation_slug_fr = "installation-guide/?id={$eid_fr}";
-       }elseif($pi['language_code'] == 'it'){
-         $eid_it =  $pi['element_id'];
-         $installation_slug_it = "installation-guide/?id={$eid_it}";
-       }elseif($pi['language_code'] == 'pt-pt'){
-         $eid_pt =  $pi['element_id'];
-         $installation_slug_pt = "installation-guide/?id={$eid_pt}";
-       }elseif($pi['language_code'] == 'en'){
-        $eid_en =  $pi['element_id'];
-        $installation_slug_en = "installation-guide/?id={$eid_en}";
-      }elseif($pi['language_code'] == 'sk'){
-        $eid_sk =  $pi['element_id'];
-        $installation_slug_sk = "installation-guide/?id={$eid_sk}";
-      }  
-     }
+
+   // Fetch all translations related to the trid
+    $query = $wpdb->get_results($wpdb->prepare(
+        "SELECT * FROM {$table_icl_trans} WHERE trid = %d", 
+        $trid
+    ), ARRAY_A);
+
+    // Initialize array to hold the slugs for each language
+    $installation_slugs = [
+        'de'    => null,
+        'es'    => null,
+        'fr'    => null,
+        'it'    => null,
+        'pt-pt' => null,
+        'en'    => null,
+        'sk'    => null,
+        'be'    => null,
+    ];
+
+    // Iterate through the results and build the slug based on language_code
+    foreach($query as $pi) {
+        if(array_key_exists($pi['language_code'], $installation_slugs)) {
+            $eid = $pi['element_id'];
+            $installation_slugs[$pi['language_code']] = "installation-guide/?id={$eid}";
+        }
+    }
  
-    $installation = get_post( $_GET['id'] ); 
-    $title = $installation->post_title;
-    $external_url = get_field("installation_external_url", $_GET['id']);
-
-    if($external_url == null){
-      $content = wpautop($installation->post_content);
-      $video_url = get_field("installation_video_url", $_GET['id']);
-    }else{
-      $content = $external_url;
-      $video_url = null;
-    }    
-}else{
-    //wp_redirect(home_url());
-    //exit;
-    if($_GET['sku'] != null){
-      $sku = $_GET['sku'];
-    }else{
-      $sku = 0;
-    }
-    $query_id =  $wpdb->get_var("SELECT sp.ID FROM {$table_posts} as sp INNER JOIN {$table_postmeta} as spm ON sp.ID = spm.post_id INNER JOIN {$table_icl_trans} as sit ON sp.ID = sit.element_id WHERE sp.post_type = 'installation' AND spm.meta_key ='sku' AND spm.meta_value = {$sku} AND sit.language_code = '{$lang}' LIMIT 1");
-    if($query_id == null){
-          $query =  $wpdb->get_results("SELECT sp.ID, spm.meta_key,spm.meta_value, sit.trid FROM {$table_posts} as sp INNER JOIN {$table_postmeta} as spm ON sp.ID = spm.post_id INNER JOIN {$table_icl_trans} as sit ON sp.ID = sit.element_id WHERE sp.post_type = 'installation' AND spm.meta_key ='installation_repeater_group' AND sit.language_code = '{$lang}'", ARRAY_A);
-          $count = count($query);
-
-          for ( $i = 0; $i < $count; $i++ ) {
-          $post_id =  $query[$i]['ID'];
-          $trid = $query[$i]['trid'];     
-          $installation_group = maybe_unserialize($query[$i]['meta_value']);
-
-          for ($j = 0; $j < count($installation_group); $j++ ) {
-              $is_sku_exists = in_array($sku,$installation_group[$j]);
-              if($is_sku_exists){
-                break;
-              }
-          }
-              if($is_sku_exists){
-                $title =  $wpdb->get_var("SELECT sp.post_title FROM {$table_posts} as sp INNER JOIN {$table_postmeta} as spm ON sp.ID = spm.post_id INNER JOIN {$table_icl_trans} as sit ON sp.ID = sit.element_id WHERE sp.post_type = 'product' AND spm.meta_key ='sku' AND spm.meta_value = {$sku} AND sit.language_code = '{$lang}'");
-                break;
-              }
-          }
+    $installation = get_post($get_id); 
     
-    }else{
-      $post_id = $query_id;
-      $installation = get_post($post_id); 
-      $title = $installation->post_title;
+    if ($installation) {
+        $title = $installation->post_title;
+        $external_url = get_field("installation_external_url", $get_id);
+    
+        if($external_url == null){
+            $content = wpautop($installation->post_content);
+            $video_url = get_field("installation_video_url", $_GET['id']);
+        } else {
+            $content = $external_url;
+            $video_url = null;
+        }
+    } else {
+        // Handle case where the installation is not found
+        echo '
+        <div class="modal fade" id="installationNotFoundModal" tabindex="-1" role="dialog" aria-labelledby="installationNotFoundModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="installationNotFoundModalLabel">Notification</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Installation Guide not found
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+            </div>
+        </div>
+        </div>
+
+        <script type="text/javascript">
+        // Trigger the modal to show
+        jQuery(document).ready(function(){
+            jQuery("#installationNotFoundModal").modal("show");
+        });
+        </script>
+        ';
+
+        // Delay the redirect to allow the user to see the modal
+        echo '
+        <script type="text/javascript">
+        setTimeout(function(){
+            window.location.href = "' . home_url() . '";
+        }, 5000); // Redirects after 5 seconds
+        </script>
+        ';
+
+        // Exit to ensure no further processing
+        exit();
+ 
     }
-    $external_url = get_field("installation_external_url", $post_id);
-    $installation_slug = "installation-guide/?sku={$sku}";
+}else{
+    // Sanitize SKU input from URL, default to 0 if not provided
+    $sku = isset($_GET['sku']) && !empty($_GET['sku']) ? sanitize_text_field($_GET['sku']) : 0;
 
-    if($external_url == null){
-      $content = wpautop(get_post_field('post_content', $post_id));
-      $video_url = get_field("installation_video_url", $post_id);
-    }else{
-      $content = $external_url;
-      $video_url = null;
-    }  
-    $check_sku = get_post_meta($post_id,'installation_repeater_group');
-    $sku_match = false;
+    if ($sku > 0) {
+        // First SQL query to search by 'sku'
+        $query_id = $wpdb->get_var($wpdb->prepare(
+            "SELECT sp.ID 
+            FROM {$table_posts} as sp
+            INNER JOIN {$table_postmeta} as spm ON sp.ID = spm.post_id
+            INNER JOIN {$table_icl_trans} as sit ON sp.ID = sit.element_id
+            WHERE sp.post_type = 'installation'
+            AND spm.meta_key = 'sku'
+            AND spm.meta_value = %s
+            AND sit.language_code = %s
+            LIMIT 1", 
+            $sku, $lang
+        ));
+    
+        if ($query_id) {
+            // If SKU is found in the first query
+            $post_id = $query_id;
+            $installation = get_post($post_id); 
+            $title = $installation->post_title;
+        } else {
+            // If no result, search within 'installation_repeater_group'
+            $results = $wpdb->get_results($wpdb->prepare(
+                "SELECT sp.ID, spm.meta_value 
+                FROM {$table_posts} as sp
+                INNER JOIN {$table_postmeta} as spm ON sp.ID = spm.post_id
+                INNER JOIN {$table_icl_trans} as sit ON sp.ID = sit.element_id
+                WHERE sp.post_type = 'installation'
+                AND spm.meta_key = 'installation_repeater_group'
+                AND sit.language_code = %s", 
+                $lang
+            ));
+    
+            $post_id = 0;
+            foreach ($results as $result) {
+                $meta_value = maybe_unserialize($result->meta_value);
+                if (is_array($meta_value)) {
+                    foreach ($meta_value as $group) {
+                        if (isset($group['sku']) && $group['sku'] == $sku) {
+                            $post_id = $result->ID;
+                            break 2; // Exit both loops when found
+                        }
+                    }
+                }
+            }
+    
+            if ($post_id > 0) {
+                $installation = get_post($post_id);
+                $title = $installation->post_title;
+            } else {              
+                // If no results found
+                echo '
+                <div class="modal fade" id="skuNotFoundModal" tabindex="-1" role="dialog" aria-labelledby="skuNotFoundModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="skuNotFoundModalLabel">Notification</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Product SKU not found
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                    </div>
+                </div>
+                </div>
 
-    $count = count($check_sku[0]);
-    for ( $i = 0; $i < $count; $i++ ) {
-    if ($check_sku[0][$i]['sku'] == $sku ) {
-      //var_dump($check_sku[0][$i]['sku']);
-      //die();
-        $sku_match = true;
-      }
-  	}
+                <script type="text/javascript">
+                // Trigger the modal to show
+                jQuery(document).ready(function(){
+                    jQuery("#skuNotFoundModal").modal("show");
+                });
+                </script>
+                ';
 
-    if($sku_match == false){
-    ?>
-      <script>
-       alert("PRODUCT SKU NOT FOUND")
-     	 window.open("https://keys.support/en/download-center","_self");
-       </script>
-    <?php 
+                // Delay the redirect to allow the user to see the modal
+                echo '
+                <script type="text/javascript">
+                setTimeout(function(){
+                    window.location.href = "' . home_url() . '";
+                }, 5000); // Redirects after 5 seconds
+                </script>
+                ';
+
+                // Exit to ensure no further processing
+                exit();
+
+            }
+        }
+    
+        $external_url = get_field("installation_external_url", $post_id);
+        $installation_slug = "installation-guide/?sku={$sku}";
+    
+        if ($external_url == null) {
+            $content = wpautop(get_post_field('post_content', $post_id));
+            $video_url = get_field("installation_video_url", $post_id);
+        } else {
+            $content = $external_url;
+            $video_url = null;
+        }
+    } else {
+        // If no url parameter sku or id
+        echo '
+        <div class="modal fade" id="skuNotFoundModal" tabindex="-1" role="dialog" aria-labelledby="skuNotFoundModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="skuNotFoundModalLabel">Notification</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Product SKU not found
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+            </div>
+        </div>
+        </div>
+
+        <script type="text/javascript">
+        // Trigger the modal to show
+        jQuery(document).ready(function(){
+            jQuery("#skuNotFoundModal").modal("show");
+        });
+        </script>
+        ';
+
+        // Delay the redirect to allow the user to see the modal
+        echo '
+        <script type="text/javascript">
+        setTimeout(function(){
+            window.location.href = "' . home_url() . '";
+        }, 5000); // Redirects after 5 seconds
+        </script>
+        ';
+
+        // Exit to ensure no further processing
+        exit();
     }
+    
 
   }
 
+  $options = get_option('ksinstallation_guide_settings', array());
 
-  $options = get_option('ksinstallation_guide_settings',array());
+  // Define default values for email and phone
+  $email_default = "willkommen@keys.express";
+  $phone_default = "+49 163 196 83 66";
   
-/*Label Trans*/
-if($lang == 'en'){
-  $options = get_option('ksinstallation_guide_settings',array());
-
-  $email= !empty($options['kscompany_email']) ? $options['kscompany_email']: '';
-  $phone = !empty($options['kscontact_number']) ? $options['kscontact_number']: '';
-  $contact_us = "Contact Form";
-  $contact_details = "Contact Details";
-}elseif($lang == 'de'){
-  $options = get_option('ksinstallation_guide_settings',array());
-
-  $email = !empty($options['kscompany_email_de']) ? $options['kscompany_email_de'] : '';
-  $phone = !empty($options['kscontact_number_de']) ? $options['kscontact_number_de'] : '';
-  $contact_us = "Kontaktformular";
-  $contact_details = "Kontaktdaten";
-}elseif($lang == 'el'){
-  $email= "willkommen@keys.express";
-  $phone = "+49 163 196 83 66";
-  $contact_us = "Contact Form";
-  $contact_details = "Contact Details";
-}elseif($lang == 'fr'){
-  $options = get_option('ksinstallation_guide_settings',array());
-
-  $email=  !empty($options['kscompany_email_fr']) ? $options['kscompany_email_fr']: '';
-  $phone = !empty($options['kscontact_number_fr']) ? $options['kscontact_number_fr']: '';
-  $contact_us = "Contact Form";
-  $contact_details = "Formulaire de contact";
-}elseif($lang == 'it'){
-  $options = get_option('ksinstallation_guide_settings',array());
-
-  $email= !empty($options['kscompany_email_it']) ? $options['kscompany_email_it']: '';
-  $phone = !empty($options['kscontact_number_it']) ? $options['kscontact_number_it']: '';
-  $contact_us = "Contact Form";
-  $contact_details = "Dettagli del contatto";
-}elseif($lang == 'pt-pt'){
-  $options = get_option('ksinstallation_guide_settings',array());
-
-  $email= !empty($options['kscompany_email_pt']) ? $options['kscompany_email_pt']: ''; 
-  $phone =  !empty($options['kscontact_number_pt']) ? $options['kscontact_number_pt']: '';
-  $contact_us = "Contact Form";
-  $contact_details = "Detalhes do contato";
-}elseif($lang == 'es'){
-  $options = get_option('ksinstallation_guide_settings',array());
-
-  $email= !empty($options['kscompany_email_es']) ? $options['kscompany_email_es']: '';
-  $phone = !empty($options['kscontact_number_es']) ? $options['kscontact_number_es']: '';
-  $contact_us = "Contact Form";
-  $contact_details = "Detalles de contacto";
-}elseif($lang == 'tr'){
-  $email= "willkommen@keys.express";
-  $phone = "+49 163 196 83 66";
-  $contact_us = "Contact Form";
-  $contact_details = "Contact Details";
-}elseif($lang == 'cs'){
-  $email= "willkommen@keys.express";
-  $phone = "+49 163 196 83 66";
-  $contact_us = "Contact Form";
-  $contact_details = "Contact Details";
-}elseif($lang == 'sk'){
-  $options = get_option('ksinstallation_guide_settings',array());
-
-  $email= !empty($options['kscompany_email_sk']) ? $options['kscompany_email_sk']: '';
-  $phone = !empty($options['kscontact_number_sk']) ? $options['kscontact_number_sk']: '';
-  $contact_us = "Kontaktný formulár";
-  $contact_details = "Kontaktné údaje";
-}
+  // Define translations for different languages
+  $translations = [
+      'en' => [
+          'email_key' => 'kscompany_email',
+          'phone_key' => 'kscontact_number',
+          'contact_us' => 'Contact Form',
+          'contact_details' => 'Contact Details'
+      ],
+      'de' => [
+          'email_key' => 'kscompany_email_de',
+          'phone_key' => 'kscontact_number_de',
+          'contact_us' => 'Kontaktformular',
+          'contact_details' => 'Kontaktdaten'
+      ],
+      'el' => [
+          'email' => $email_default,
+          'phone' => $phone_default,
+          'contact_us' => 'Contact Form',
+          'contact_details' => 'Contact Details'
+      ],
+      'fr' => [
+          'email_key' => 'kscompany_email_fr',
+          'phone_key' => 'kscontact_number_fr',
+          'contact_us' => 'Contact Form',
+          'contact_details' => 'Formulaire de contact'
+      ],
+      'it' => [
+          'email_key' => 'kscompany_email_it',
+          'phone_key' => 'kscontact_number_it',
+          'contact_us' => 'Contact Form',
+          'contact_details' => 'Dettagli del contatto'
+      ],
+      'pt-pt' => [
+          'email_key' => 'kscompany_email_pt',
+          'phone_key' => 'kscontact_number_pt',
+          'contact_us' => 'Contact Form',
+          'contact_details' => 'Detalhes do contato'
+      ],
+      'es' => [
+          'email_key' => 'kscompany_email_es',
+          'phone_key' => 'kscontact_number_es',
+          'contact_us' => 'Contact Form',
+          'contact_details' => 'Detalles de contacto'
+      ],
+      'tr' => [
+          'email' => $email_default,
+          'phone' => $phone_default,
+          'contact_us' => 'Contact Form',
+          'contact_details' => 'Contact Details'
+      ],
+      'cs' => [
+          'email' => $email_default,
+          'phone' => $phone_default,
+          'contact_us' => 'Contact Form',
+          'contact_details' => 'Contact Details'
+      ],
+      'sk' => [
+          'email_key' => 'kscompany_email_sk',
+          'phone_key' => 'kscontact_number_sk',
+          'contact_us' => 'Kontaktný formulár',
+          'contact_details' => 'Kontaktné údaje'
+      ],
+      'be' => [
+          'email_key' => 'kscompany_email_be',
+          'phone_key' => 'kscontact_number_be',
+          'contact_us' => 'Kontaktný formulár',
+          'contact_details' => 'Kontaktné údaje'
+      ]
+  ];
+  
+  // Get translation for the current language
+  $translation = isset($translations[$lang]) ? $translations[$lang] : $translations['en'];
+  
+  // Retrieve email and phone from options if available, otherwise use defaults
+  $email = isset($translation['email_key']) ? (!empty($options[$translation['email_key']]) ? $options[$translation['email_key']] : '') : $translation['email'];
+  $phone = isset($translation['phone_key']) ? (!empty($options[$translation['phone_key']]) ? $options[$translation['phone_key']] : '') : $translation['phone'];
+  
+  // Assign contact form and details text
+  $contact_us = $translation['contact_us'];
+  $contact_details = $translation['contact_details'];
+  
  ?>   
 <style>
   .dbox .icon {
@@ -293,7 +443,7 @@ span.fa  {
 
 <?php get_footer(); ?>
 <div class="wpml-ls wpml-ls-legacy-list-horizontal text-center">
-    <ul>
+<ul>
         <?php
         $languages = [
             'de' => 'Deutsch',
@@ -304,21 +454,20 @@ span.fa  {
             'pt-pt' => 'Português',
             'sk' => 'Slovenčina'
         ];
-        
-        $installation_slugs = [
-            'de' => $installation_slug_de,
-            'fr' => $installation_slug_fr,
-            'it' => $installation_slug_it,
-            'en' => $installation_slug_en,
-            'es' => $installation_slug_es,
-            'pt-pt' => $installation_slug_pt,
-            'sk' => $installation_slug_sk
-        ];
+
+        // Get the SKU from the query parameters
+        $sku = isset($_GET['sku']) ? $_GET['sku'] : 'not-found';
+
+        // Get the base URL of the site
+        //$base_url = home_url();
+        $base_url = "http://localhost/keysupport";
 
         foreach ($languages as $lang_code => $lang_name) {
-            $slug = $installation_slugs[$lang_code];
-            $flag_url = "https://keys.support/wp-content/plugins/sitepress-multilingual-cms/res/flags/{$lang_code}.png";
-            $url = "https://keys.support/{$lang_code}/{$slug}";
+            // Construct the slug dynamically based on the SKU and language code
+            $slug = "installation-guide/?sku={$sku}";
+            
+            $flag_url = "{$base_url}/wp-content/plugins/sitepress-multilingual-cms/res/flags/{$lang_code}.png";
+            $url = "{$base_url}/{$lang_code}/{$slug}";
             echo "<li class='wpml-ls-slot-footer wpml-ls-item wpml-ls-item-{$lang_code} wpml-ls-item-legacy-list-horizontal'>
                     <a href='{$url}' class='wpml-ls-link'>
                         <img class='wpml-ls-flag' src='{$flag_url}' alt='' width='18' height='12'>
