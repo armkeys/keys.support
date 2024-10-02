@@ -399,6 +399,7 @@ function get_post_name() {
             LEFT JOIN {$wpdb->prefix}icl_translations t ON pm.post_id = t.element_id
             LEFT JOIN {$wpdb->prefix}posts p ON pm.post_id = p.ID
             WHERE p.post_type = 'product' 
+             AND p.post_status = 'publish' 
             AND pm.meta_key = 'sku' 
             AND pm.meta_value = %s 
             AND t.language_code = %s",
@@ -424,6 +425,7 @@ function get_post_name() {
                 LEFT JOIN {$wpdb->prefix}icl_translations t ON pm.post_id = t.element_id
                 LEFT JOIN {$wpdb->prefix}posts p ON pm.post_id = p.ID
                 WHERE p.post_type = 'product' 
+                AND p.post_status = 'publish'
                 AND pm.meta_key = 'download_sku' 
                 AND FIND_IN_SET(%s, pm.meta_value) > 0 
                 AND t.language_code = %s",
