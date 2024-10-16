@@ -459,15 +459,24 @@ span.fa  {
         // Get the SKU from the query parameters
         $sku = isset($_GET['sku']) ? $_GET['sku'] : 'not-found';
 
+        if ($sku === 'not-found' && isset($_GET['id'])) {
+            $get_id = intval($_GET['id']);
+            $sku_field = get_field('sku', $get_id);
+
+            // If the SKU field is found, use it; otherwise, keep 'not-found'
+            if ($sku_field) {
+                $sku = $sku_field;
+            }
+        }
+
         // Get the base URL of the site
         //$base_url = home_url();
-        $base_url = "https://keysupport";
+        $base_url = "https:///keys.support";
 
         foreach ($languages as $lang_code => $lang_name) {
-            // Construct the slug dynamically based on the SKU and language code
             $slug = "installation-guide/?sku={$sku}";
             
-            $flag_url = "{$base_url}/wp-content/plugins/sitepress-multilingual-cms/res/flags/{$lang_code}.png";
+            $flag_url = "{$base_url}/wp-content/plugins/sitepress-multilingual-cms/res/flags/{$lang_code}.svg";
             $url = "{$base_url}/{$lang_code}/{$slug}";
             echo "<li class='wpml-ls-slot-footer wpml-ls-item wpml-ls-item-{$lang_code} wpml-ls-item-legacy-list-horizontal'>
                     <a href='{$url}' class='wpml-ls-link'>
