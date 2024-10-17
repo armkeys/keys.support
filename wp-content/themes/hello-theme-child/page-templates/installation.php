@@ -210,46 +210,62 @@ if($_GET['id'] != null){
             $video_url = null;
         }
     } else {
-        // If no url parameter sku or id
-        echo '
-        <div class="modal fade" id="skuNotFoundModal" tabindex="-1" role="dialog" aria-labelledby="skuNotFoundModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="skuNotFoundModalLabel">Notification</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                Product SKU not found
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-            </div>
-        </div>
-        </div>
+           // Check if the request is via the post permalink without SKU or ID
+           if (is_singular('installation')) {
+                    global $post;
 
-        <script type="text/javascript">
-        // Trigger the modal to show
-        jQuery(document).ready(function(){
-            jQuery("#skuNotFoundModal").modal("show");
-        });
-        </script>
-        ';
+                    $installation = get_post($post->ID);
 
-        // Delay the redirect to allow the user to see the modal
-        echo '
-        <script type="text/javascript">
-        setTimeout(function(){
-            window.location.href = "' . home_url() . '";
-        }, 5000); // Redirects after 5 seconds
-        </script>
-        ';
+                    if ($installation) {
+                        $title = $installation->post_title;
+                        $content = wpautop($installation->post_content);
 
-        // Exit to ensure no further processing
-        exit();
+                        $external_url = get_field("installation_external_url", $post->ID);
+                        $video_url = get_field("installation_video_url", $post->ID);
+
+                        // Override content if an external URL exists
+                        if ($external_url) {
+                            $content = '<a href="' . esc_url($external_url) . '" class="btn btn-danger" target="_blank">Click here for details</a>';
+                            $video_url = null; // Clear video URL if using external content
+                        }
+                    } else {
+                        // Handle case where the post is not found
+                        echo '<div class="modal fade" id="postNotFoundModal" tabindex="-1" role="dialog" aria-labelledby="postNotFoundModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="postNotFoundModalLabel">Notification</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Installation Guide not found.
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <script type="text/javascript">
+                            jQuery(document).ready(function(){
+                                jQuery("#postNotFoundModal").modal("show");
+                            });
+                            setTimeout(function(){
+                                window.location.href = "' . home_url() . '";
+                            }, 5000);
+                        </script>';
+                        exit();
+                    }
+        } else {
+                    // Handle requests with missing or invalid SKU/ID and no permalink
+                    echo '<script type="text/javascript">
+                            alert("No valid SKU or ID provided.");
+                            window.location.href = "' . home_url() . '";
+                        </script>';
+                    exit();
+        }
     }
     
 
