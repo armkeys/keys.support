@@ -486,13 +486,13 @@ span.fa  {
         }
 
         //$base_url = home_url();
-        $base_url = "https:///keys.support";
+        $base_url = "https://keys.support";
 
         foreach ($languages as $lang_code => $lang_name) {
                // Set the slug based on whether SKU was found or the permalink is used
                 if ($sku === 'not-found' && !isset($_GET['id'])) {
                     $permalink = get_permalink();
-                    $slug = basename($permalink); 
+                    $slug = "installation/".basename($permalink); 
                 } else {
                     $slug = "installation-guide/?sku={$sku}";
                 }
