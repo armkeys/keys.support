@@ -485,12 +485,17 @@ span.fa  {
             }
         }
 
-        // Get the base URL of the site
         //$base_url = home_url();
         $base_url = "https:///keys.support";
 
         foreach ($languages as $lang_code => $lang_name) {
-            $slug = "installation-guide/?sku={$sku}";
+               // Set the slug based on whether SKU was found or the permalink is used
+                if ($sku === 'not-found' && !isset($_GET['id'])) {
+                    $permalink = get_permalink();
+                    $slug = basename($permalink); 
+                } else {
+                    $slug = "installation-guide/?sku={$sku}";
+                }
             
             $flag_url = "{$base_url}/wp-content/plugins/sitepress-multilingual-cms/res/flags/{$lang_code}.svg";
             $url = "{$base_url}/{$lang_code}/{$slug}";
