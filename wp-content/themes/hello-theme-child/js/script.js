@@ -92,17 +92,17 @@ jQuery(document).ready(function ($){
 		let url = window.location.toString();
 		let langUrl;
 	
-		langUrl = baseUrl + "/product/" + slug + "/?slug=" + slug;
-		window.open(langUrl, "_self", 'slug=' + slug);
+		//langUrl = baseUrl + "/product/" + slug + "/?slug=" + slug;
+		//window.open(langUrl, "_self", 'slug=' + slug);
 
-		// for (let i = 0; i < languageCodes.length; i++) {
-		// 	let langCode = languageCodes[i];
-		// 	if (url.includes('/' + langCode + '/')) {
-		// 		langUrl = baseUrl + langCode + "/product/" + slug + "/?slug=" + slug;
-		// 		window.open(langUrl, "_self", 'slug=' + slug);
-		// 		break;
-		// 	}
-		// }
+		 for (let i = 0; i < languageCodes.length; i++) {
+		 	let langCode = languageCodes[i];
+		 	if (url.includes('/' + langCode + '/')) {
+		 		langUrl = baseUrl +"/"+ langCode + "/product/" + slug + "/?slug=" + slug;
+		 		window.open(langUrl, "_self", 'slug=' + slug);
+		 		break;
+		 	}
+		 }
 	});
 
 	jQuery('select.system-filter-download').on('change', function(){
