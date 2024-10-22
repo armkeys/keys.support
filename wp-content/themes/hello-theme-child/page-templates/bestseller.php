@@ -120,10 +120,10 @@ $bestseller[] = array(
 );
 
 $bestseller[] = array(
-    'product_name' => "Windows 11 Home OEM Sticker",
-    'price' => ["44.90 €", "Fr.  45,25"],
-    'image' => $bestseller_images . "2404.png",
-    'url' => "https://keys.express/{$store_lang_url}/windows-11-home-oem-sticker.html",
+    'product_name' => "Office 2024 Professional Plus",
+    'price' => ["24.95 €", "Fr.  23,35"],
+    'image' => $bestseller_images . "1521.png",
+    'url' => "https://keys.express/{$store_lang_url}/office-2024-standard-4.html",
 );
 
 $bestseller[] = array(
