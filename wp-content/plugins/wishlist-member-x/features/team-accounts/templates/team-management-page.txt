@@ -1,3 +1,0 @@
-<!-- wp:shortcode -->
-[wlm_team_management]
-<!-- /wp:shortcode -->

@@ -1,3 +1,0 @@
-<?php
-
-// Integration handler.
