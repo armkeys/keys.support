@@ -24,7 +24,10 @@ wp-config.php
 /wp-content/themes/twenty*/
 
 # Example plugin
-/wp-content/plugins/hello.php
+wp-content/plugins/*
+
+# Allow custom or important plugins
+!wp-content/plugins/ks-product-export/
 
 # Uploads
 /wp-content/uploads/
