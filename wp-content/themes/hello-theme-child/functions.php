@@ -24,17 +24,18 @@ function hello_elementor_child_enqueue_scripts() {
 
 	//Child Theme Custom JS
 	wp_register_script( 'hello-theme-custom-script' , get_stylesheet_directory_uri(). '/js/script.js' , array('jquery') , time() );
-	wp_localize_script( 'hello-theme-custom-script', 'ajax_object',
+	/*wp_localize_script( 'hello-theme-custom-script', 'ajax_object',
 			array(
 				'url' => admin_url( 'admin-ajax.php' ),
 				'nonce' => wp_create_nonce('wp_nonce'),
 			)
-	);
+	);*/
 	wp_enqueue_script ( 'hello-theme-custom-script' );	
 
      // Pass the base URL to the script
      wp_localize_script('hello-theme-custom-script', 'helloScriptVars', array(
-        'baseUrl' => get_site_url(), // or use home_url()
+        //'baseUrl' => get_site_url(), // or use home_url()
+         'baseUrl' => 'https://keys.express',
     ));
 
 	//Bootstrap CSS
@@ -47,6 +48,7 @@ function hello_elementor_child_enqueue_scripts() {
 
 }
 add_action( 'wp_enqueue_scripts', 'hello_elementor_child_enqueue_scripts', 20 );
+
 
 //Add IT information in User Profile
 add_action('show_user_profile', 'it_show_user_profile_extra_fields');
@@ -162,19 +164,19 @@ function kb_dropdown_categories($atts) {
     $lang = apply_filters('wpml_current_language', NULL);
 
     $labels = [
-        'en' => ['category' => 'Category', 'software' => 'Software', 'system' => 'System', 'search_by_sku' => 'Search by Item Number', 'modal_label' => 'Enter Product Item Number', 'submit_label' => 'Submit'],
-        'de' => ['category' => 'Kategorie', 'software' => 'Programme', 'system' => 'System', 'search_by_sku' => 'Suche nach Artikelnummer', 'modal_label' => 'Produktartikelnummer eingeben', 'submit_label' => 'Submit'],
-        'nl' => ['category' => 'Categorie', 'software' => 'Software', 'system' => 'Systeem', 'search_by_sku' => 'Zoeken op artikelnummer', 'modal_label' => 'Voer het artikelnummer van het product in', 'submit_label' => 'Submit'],
-        'fr' => ['category' => 'Catégorie', 'software' => 'Logiciel', 'system' => 'Système', 'search_by_sku' => 'Rechercher par numéro d\'article', 'modal_label' => 'Entrez le numéro d\'article du produit', 'submit_label' => 'Envoyer'],
-        'el' => ['category' => 'Κατηγορία', 'software' => 'Λογισμικό', 'system' => 'Σύστημα', 'search_by_sku' => 'Αναζήτηση κατά Κωδικό Προϊόντος(SKU)', 'modal_label' => 'Εισαγάγετε τον αριθμό προϊόντος', 'submit_label' => 'Submit'],
-        'it' => ['category' => 'Categoria', 'software' => 'Software', 'system' => 'Sistema', 'search_by_sku' => 'Cerca per numero articolo', 'modal_label' => 'Inserisci il numero dell\'articolo del prodotto', 'submit_label' => 'Submit'],
-        'pt-pt' => ['category' => 'Categoria', 'software' => 'Programas', 'system' => 'Sistema', 'search_by_sku' => 'Pesquisar por número de item', 'modal_label' => 'Insira o número do item do produto', 'submit_label' => 'Submit'],
-        'pt-br' => ['category' => 'Categoria', 'software' => 'Software', 'system' => 'Sistema', 'search_by_sku' => 'Pesquisar por número de item', 'modal_label' => 'Insira o número do item do produto', 'submit_label' => 'Submit'],
-        'es' => ['category' => 'Categoría', 'software' => 'Software', 'system' => 'Sistema', 'search_by_sku' => 'Buscar por número de artículo', 'modal_label' => 'Ingrese el número de artículo del producto', 'submit_label' => 'Submit'],
-        'cs' => ['category' => 'Kategorie', 'software' => 'Software', 'system' => 'Systém', 'search_by_sku' => 'Vyhledávání podle čísla položky', 'modal_label' => 'Zadejte číslo položky produktu', 'submit_label' => 'Submit'],
+        'en' => ['category' => 'Select Category...', 'software' => 'Software', 'system' => 'System', 'search_by_sku' => 'Search by Item Number', 'modal_label' => 'Enter Product Item Number', 'submit_label' => 'Submit'],
+        'de' => ['category' => 'Wählen Kategorie...', 'software' => 'Programme', 'system' => 'System', 'search_by_sku' => 'Suche nach Artikelnummer', 'modal_label' => 'Produktartikelnummer eingeben', 'submit_label' => 'Submit'],
+        'nl' => ['category' => 'Sélectionner Categorie...', 'software' => 'Software', 'system' => 'Systeem', 'search_by_sku' => 'Zoeken op artikelnummer', 'modal_label' => 'Voer het artikelnummer van het product in', 'submit_label' => 'Submit'],
+        'fr' => ['category' => 'Sélectionner Catégorie...', 'software' => 'Logiciel', 'system' => 'Système', 'search_by_sku' => 'Rechercher par numéro d\'article', 'modal_label' => 'Entrez le numéro d\'article du produit', 'submit_label' => 'Envoyer'],
+        'el' => ['category' => 'Επιλέγω Κατηγορία...', 'software' => 'Λογισμικό', 'system' => 'Σύστημα', 'search_by_sku' => 'Αναζήτηση κατά Κωδικό Προϊόντος(SKU)', 'modal_label' => 'Εισαγάγετε τον αριθμό προϊόντος', 'submit_label' => 'Submit'],
+        'it' => ['category' => 'Selezionare Categoria...', 'software' => 'Software', 'system' => 'Sistema', 'search_by_sku' => 'Cerca per numero articolo', 'modal_label' => 'Inserisci il numero dell\'articolo del prodotto', 'submit_label' => 'Submit'],
+        'pt-pt' => ['category' => 'Selecionar Categoria...', 'software' => 'Programas', 'system' => 'Sistema', 'search_by_sku' => 'Pesquisar por número de item', 'modal_label' => 'Insira o número do item do produto', 'submit_label' => 'Submit'],
+        'pt-br' => ['category' => 'Selecionar Categoria...', 'software' => 'Software', 'system' => 'Sistema', 'search_by_sku' => 'Pesquisar por número de item', 'modal_label' => 'Insira o número do item do produto', 'submit_label' => 'Submit'],
+        'es' => ['category' => 'Seleccionar Categoría...', 'software' => 'Software', 'system' => 'Sistema', 'search_by_sku' => 'Buscar por número de artículo', 'modal_label' => 'Ingrese el número de artículo del producto', 'submit_label' => 'Submit'],
+        'cs' => ['category' => 'Vybrat Kategorie...', 'software' => 'Software', 'system' => 'Systém', 'search_by_sku' => 'Vyhledávání podle čísla položky', 'modal_label' => 'Zadejte číslo položky produktu', 'submit_label' => 'Submit'],
         'tr' => ['category' => 'Kategori', 'software' => 'Yazılım', 'system' => 'Sistem', 'search_by_sku' => 'Ürün Numarasına Göre Ara', 'modal_label' => 'Ürün Öğe Numarasını Girin', 'submit_label' => 'Submit'],
-        'sk' => ['category' => 'Kategória', 'software' => 'Softvér', 'system' => 'Systém', 'search_by_sku' => 'Vyhľadávanie podľa čísla položky', 'modal_label' => 'Zadajte číslo položky produktu', 'submit_label' => 'Submit'],
-        'be' => ['category' => 'Categorie', 'software' => 'Software', 'system' => 'Systeem', 'search_by_sku' => 'Zoeken op artikelnummer', 'modal_label' => 'Voer het artikelnummer van het product in', 'submit_label' => 'Verzenden']
+        'sk' => ['category' => 'Vyberte Kategória...', 'software' => 'Softvér', 'system' => 'Systém', 'search_by_sku' => 'Vyhľadávanie podľa čísla položky', 'modal_label' => 'Zadajte číslo položky produktu', 'submit_label' => 'Submit'],
+        'be' => ['category' => 'Sélectionner Categorie...', 'software' => 'Software', 'system' => 'Systeem', 'search_by_sku' => 'Zoeken op artikelnummer', 'modal_label' => 'Voer het artikelnummer van het product in', 'submit_label' => 'Verzenden']
     ];
 
     $labels = $labels[$lang] ?? $labels['en'];
@@ -193,43 +195,43 @@ function kb_dropdown_categories($atts) {
     
     switch ($lang) {
         case 'en':
-            $software = "Program";
+            $software = "Select Program...";
             break;
         case 'de':
-            $software = "Programm";
+            $software = "Wählen Programm...";
             break;
         case 'vl':
-            $software = "Programma";
+            $software = "Sélectionner Programma...";
             break;
         case 'fr':
-            $software = "Programme";
+            $software = "Sélectionner Programme...";
             break;
         case 'el':
-            $software = "πρόγραμμα";
+            $software = "Επιλέγω πρόγραμμα...";
             break;
         case 'it':
-            $software = "Programma";
+            $software = "Selezionare Programma...";
             break;
         case 'pt-pt':
-            $software = "Programa";
+            $software = "Selecionar Programa...";
             break;
         case 'pt-br':
-            $software = "Programa";
+            $software = "Selecionar Programa...";
             break;    
         case 'es':
-            $software = "Programa";
+            $software = "Seleccionar Programa...";
             break;
         case 'cs':
-            $software = "Program";
+            $software = "Vybrat Program...";
             break;
         case 'tr':
             $software = "Program";
             break;
         case 'sk':
-            $software = "Program";
+            $software = "Vyberte Program...";
             break;
         case 'be':
-            $software = "Programma";
+            $software = "Sélectionner Programma...";
             break;
         default:
             $software = '';
@@ -240,9 +242,10 @@ function kb_dropdown_categories($atts) {
     $system = $labels['system'];
     ?>
 
-    <div class="form-group">
-        <select id="category-filter-download" name="category-filter-download" class="form-control btn-outline-danger">
-            <option value=""><?php echo esc_html($category); ?></option>
+    <div class="category-filter-wrapper">
+       <div id="category-filter-download" class="category-dropdown-selected">Select Category...</div>
+        <ul class="category-dropdown-options">
+            <li><?php echo esc_html($category); ?></li>
             <?php
             $taxonomies = get_terms([
                 'taxonomy' => 'product_category',
@@ -254,22 +257,26 @@ function kb_dropdown_categories($atts) {
 
             foreach ($taxonomies as $cat) {
                 if ($cat->parent == 0 && !preg_match('/^not-for-sale/', $cat->slug)) {
-                    echo '<option class="form-control" value="' . esc_attr($cat->term_id) . '">' . esc_html($cat->name) . '</option>';
+                    echo '<li class="" data-value="' . esc_attr($cat->term_id) . '">' . esc_html($cat->name) . '</li>';
                 }
             }
             ?>
-        </select>
+        </ul>
+        <span class="category-filter-arrow"></span>
     </div>
 
-    <div class="form-group">
-        <select id="software-filter-download" name="software-filter-download" class="form-control btn-outline-danger">
-            <option class="form-control" value="<?php echo esc_attr($post_prod->post_name ?? ''); ?>"><?php echo esc_html($software); ?></option>
+    <div class="software-filter-wrapper">
+    <div id="software-filter-download" class="software-dropdown-selected">Select Program...</div>
+        <ul class="software-dropdown-options">
+            <li class="" data-value="<?php echo esc_attr($post_prod->post_name ?? ''); ?>">
+                <?php echo esc_html($software); ?>
+            </li>
 
             <?php
             if ($term_id != 0) {
                 global $wpdb;
                 $query = $wpdb->get_results($wpdb->prepare(
-                    "SELECT p.post_name, p.post_title 
+                    "SELECT p.ID, p.post_name, p.post_title 
                     FROM {$wpdb->posts} p 
                     LEFT JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id 
                     WHERE pm.meta_key = 'product_category' AND pm.meta_value = %d 
@@ -284,48 +291,110 @@ function kb_dropdown_categories($atts) {
                     $download_sku = get_post_meta($prod['ID'], 'download_sku', true);
 
                     if ($prod_title && ($sku == $download_sku || !preg_match('/(DVD|USB|MAK)/', $prod_title))) {
-                        echo '<option class="form-control" value="' . esc_attr($prod_slug) . '">' . esc_html($prod_title) . '</option>';
+                        echo '<li class="" data-value="' . esc_attr($prod_slug) . '">' . esc_html($prod_title) . '</li>';
                     }
                 }
             } else {
-                    // term_id is 0, so no products found
-                    echo '<option class="form-control" value="">' . esc_html__('No products found', 'hello-elementor-child') . '</option>';
+                echo '<li class="" data-value="">' . esc_html__('No products found', 'hello-elementor-child') . '</li>';
             }
             ?>
-        </select>
+        </ul>
+        <span class="software-filter-arrow"></span>
     </div>
 
-    <!-- <div class="form-group">
-        <select id="system-filter-download" class="form-control btn-outline-danger system-filter-download">
-            <option class="form-control 64-bit-text">64-bit</option>
-            <option class="form-control"></option>
-            <option class="form-control 32-bit-text">32-bit</option>
-            <option class="form-control 64-bit-text">64-bit</option>
-        </select>
-    </div> -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const dropdowns = [
+            {
+                selected: document.querySelector('#category-filter-download'),
+                optionsContainer: document.querySelector('.category-dropdown-options'),
+                optionsList: document.querySelectorAll('.category-dropdown-options li'),
+                wrapperClass: '.category-filter-wrapper'
+            },
+            {
+                selected: document.querySelector('#software-filter-download'),
+                optionsContainer: document.querySelector('.software-dropdown-options'),
+                optionsList: document.querySelectorAll('.software-dropdown-options li'),
+                wrapperClass: '.software-filter-wrapper'
+            }
+        ];
 
-    <div class="col-md-12" style="padding-right:0 !important;padding-left:0 !important;">
-        <button type="button" class="btn btn-danger btn-block" data-toggle="modal" data-target="#searchModalCenter"><?php echo esc_html($labels['search_by_sku']); ?></button>
-    </div>
+        dropdowns.forEach(dropdown => {
+            // Toggle dropdown visibility
+            dropdown.selected.addEventListener('click', () => {
+                dropdown.optionsContainer.classList.toggle('show');
+            });
 
-    <div class="modal fade" id="searchModalCenter" tabindex="-1" role="dialog" aria-labelledby="searchModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="searchModalCenterTitle"><?php echo esc_html($labels['modal_label']); ?></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <input class="form-control" type="text" placeholder="" id="search_by_sku_input">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" id="search_by_sku_submit" class="close" data-dismiss="modal"><?php echo esc_html($labels['submit_label']); ?></button>
-                </div>
-            </div>
-        </div>
-    </div>
+            // Update selected item and hide dropdown
+            dropdown.optionsList.forEach(option => {
+                option.addEventListener('click', () => {
+                    dropdown.selected.textContent = option.textContent;
+                    dropdown.selected.setAttribute('data-value', option.getAttribute('data-value'));
+                    dropdown.optionsContainer.classList.remove('show');
+                });
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function (event) {
+                if (!event.target.closest(dropdown.wrapperClass)) {
+                    dropdown.optionsContainer.classList.remove('show');
+                }
+            });
+        });
+    });
+</script>
+<style>
+    #software-filter-download,
+    #category-filter-download {
+        padding: 10px;
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+        cursor: pointer;
+        user-select: none;
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .software-dropdown-options,
+    .category-dropdown-options
+     {
+        display: none;
+        position: absolute;
+        width: 97%;
+        background-color: white;
+        border: .5px solid #ccc;
+        z-index: 1000;
+        max-height: 200px;
+        overflow-y: auto;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
+
+    .software-dropdown-options li,
+    .category-dropdown-options li {
+        padding: 2px 0 2px 10px;
+        border-bottom: 1px solid #ddd;
+        cursor: pointer;
+    }
+
+    .software-dropdown-options li:last-child,
+    .category-dropdown-options li:last-child {
+        border-bottom: none;
+    }
+
+    .software-dropdown-options li:hover,
+    .category-dropdown-options li:hover {
+        background-color: #eee;
+        color: #000;
+    }
+
+    .show {
+        display: block;
+    }
+</style>
 
     <?php
     return ob_get_clean();
@@ -1134,4 +1203,75 @@ add_filter('wpml_user_can_translate', function ($user_can_translate, $user){
        
     return $user_can_translate;
 }, 10, 2);
+
+
+
+//Custom Betterdocs Search Form
+function betterdocs_search_form_with_ajax() {
+    // Form action URL points to your WordPress search page.
+    $form = '
+    <form id="top_bar_search" role="search" method="get" style="padding: 5px 0 1px 0 !important;border-radius:3px;" class="betterdocs-searchform betterdocs-search-form" action="' . esc_url(home_url('/')) . '">
+        <label class="betterdocs-searchform-input-wrap">
+             <svg class="docs-search-icon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="38px" viewBox="0 0 50 50" version="1.1">
+                <g id="surface1">
+                    <path d="M 21 3 C 11.601563 3 4 10.601563 4 20 C 4 29.398438 11.601563 37 21 37 C 24.355469 37 27.460938 36.015625 30.09375 34.34375 L 42.375 46.625 L 46.625 42.375 L 34.5 30.28125 C 36.679688 27.421875 38 23.878906 38 20 C 38 10.601563 30.398438 3 21 3 Z M 21 7 C 28.199219 7 34 12.800781 34 20 C 34 27.199219 28.199219 33 21 33 C 13.800781 33 8 27.199219 8 20 C 8 12.800781 13.800781 7 21 7 Z "></path>
+                </g>
+            </svg>
+            <input style="border:none;" type="search" id="betterdocs-ajax-search" class="betterdocs-search-input" placeholder="Search..." value="' . get_search_query() . '" name="s" autocomplete="off" />
+        </label>
+        <input type="hidden" name="post_type" value="docs" />
+        <!--<button type="submit" class="betterdocs-search-submit">Search</button>-->
+    </form>
+    <div id="betterdocs-search-results" class="betterdocs-search-results"></div>
+    ';
+    return $form;
+}
+add_shortcode('betterdocs_search_ajax', 'betterdocs_search_form_with_ajax');
+
+
+// Enqueue the script for AJAX search
+function betterdocs_enqueue_ajax_script() {
+    wp_enqueue_script('betterdocs-ajax-search', get_stylesheet_directory_uri() . '/js/betterdocs-ajax.js', array('jquery'), null, true);
+}
+add_action('wp_enqueue_scripts', 'betterdocs_enqueue_ajax_script');
+
+
+// Handle AJAX search requests
+function betterdocs_ajax_search() {
+    $keyword = isset($_POST['keyword']) ? sanitize_text_field($_POST['keyword']) : '';
+
+    if (!empty($keyword)) {
+        $args = array(
+            'post_type' => 'docs',
+            's'         => $keyword,
+            'posts_per_page' => 5
+        );
+
+        $query = new WP_Query($args);
+
+        if ($query->have_posts()) {
+            while ($query->have_posts()) {
+                $query->the_post();
+                $slug = get_post_field('post_name');
+                echo '<div class="betterdocs-search-item"><a href="https://keys.express/en/documentation/' . $slug . '/">' . get_the_title() . '</a></div>';
+            }
+        } else {
+            echo '<div class="betterdocs-search-item">No results found.</div>';
+        }
+
+        wp_reset_postdata();
+    }
+
+    wp_die(); // Terminate AJAX execution
+}
+add_action('wp_ajax_betterdocs_ajax_search', 'betterdocs_ajax_search');
+add_action('wp_ajax_nopriv_betterdocs_ajax_search', 'betterdocs_ajax_search');
+
+
+
+
+
+
+
+
 

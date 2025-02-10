@@ -1,9 +1,7 @@
-
-
 jQuery(document).ready(function ($){
 	
 	let baseUrl = helloScriptVars.baseUrl;
-
+	
 	/*Download center*/
 	var ur = window.location.href;
 	var downloadKeywords = ['/en/download-center/', '/download-centrum/', '/centre-de-telechargement/', '/κέντρο-λήψης/', '/centro-download/', '/centro-de-download/', '/centro-de-descargas/', '/centrum-stahovani/', '/indirme-merkezi/', '/downloadcentrum/'];
@@ -12,31 +10,35 @@ jQuery(document).ready(function ($){
 		jQuery('#software-filter-download').select2({
 			width: '100%'
 		});
+	
 	}
 
 	var system = jQuery("select.system-filter-download").val();
 
-	// Hide all elements by default
-	// jQuery(".system-64-bit-label, .system-64-bit-button, .system-32-bit-label, .system-32-bit-button").hide();
 
-	// Show the relevant elements based on the selected system
-	// if (system === "64-bit") {
-	// 	jQuery(".system-64-bit-label, .system-64-bit-button").show();
-	// } else if (system === "32-bit") {
-	// 	jQuery(".system-32-bit-label, .system-32-bit-button").show();
-	// } else {
-	// 	// Default case
-	// 	jQuery(".system-64-bit-label, .system-64-bit-button").show();
-	// }
-
-
-	jQuery('#category-filter-download').on('change', function () {
-		var ur = window.location.href;
-		var product_term_id = jQuery(this).val();
-		console.log('PRODUCT TERM ID', product_term_id);
+	jQuery('#category-filter-download').on('click', function () {
+		// Toggle the visibility of the dropdown
+		jQuery('.category-dropdown-options').toggle();
+	});
 	
-		jQuery("#software-filter-download").html("");
+	// When an option is clicked, trigger the logic
+	jQuery('.category-dropdown-options').on('click', 'li', function () {
+		var product_term_id = jQuery(this).data('value');
+		console.log('PRODUCT TERM ID:', product_term_id);
 	
+		// Show the loading popup
+		jQuery('#loading-popup').show();
+
+		// Set selected category to display in the main dropdown
+		jQuery('#category-filter-download').text(jQuery(this).text()).attr('data-value', product_term_id);
+	
+		// Hide the dropdown
+		jQuery('.category-dropdown-options').hide();
+	
+		// Clear existing options in the software dropdown
+		jQuery(".software-dropdown-options").html("");
+	
+		// Language map for the default option
 		var languageMap = {
 			'en': 'Software',
 			'de': 'Programme',
@@ -52,6 +54,7 @@ jQuery(document).ready(function ($){
 			'be': 'Software'
 		};
 	
+		var ur = window.location.href;
 		var languageCode = Object.keys(languageMap).find(code => ur.includes('/' + code + '/'));
 	
 		if (!languageCode) {
@@ -60,10 +63,12 @@ jQuery(document).ready(function ($){
 	
 		var software = languageMap[languageCode];
 	
-		jQuery("#software-filter-download").append("<option value=''>" + software + "</option>");
+		// Append the default option to the software dropdown
+		jQuery(".software-dropdown-options").append("<li class='' data-value=''>" + software + "</li>");
 	
+		// Perform AJAX to get new items
 		jQuery.ajax({
-			url: ajax_object.url,
+			url: "https://keys.express/wp-admin/admin-ajax.php",
 			method: 'get',
 			data: { 'action': 'get_software', 'product_term_id': product_term_id },
 			dataType: 'JSON',
@@ -73,71 +78,86 @@ jQuery(document).ready(function ($){
 				console.log("RES LENGTH", len);
 	
 				if (len > 0) {
+					// Append new items dynamically
 					for (var i = 0; i < len; i++) {
-						jQuery("#software-filter-download").append("<option value=\"" + res[i].prod_slug + "\">" + res[i].prod_post_title + "</option>");
+						jQuery(".software-dropdown-options").append("<li class='' data-value=\"" + res[i].prod_slug + "\">" + res[i].prod_post_title + "</li>");
 					}
+	
+					// Re-bind click event for newly added items
+					jQuery(".software-dropdown-options li").off('click').on('click', function () {
+						var selectedText = jQuery(this).text();
+						var selectedValue = jQuery(this).data('value');
+						jQuery('#software-filter-download').text(selectedText).attr('data-value', selectedValue);
+	
+						// Hide dropdown after selection
+						jQuery('.software-dropdown-options').removeClass('show');
+					});
+
+					jQuery('#loading-popup').fadeOut();
+	
 				} else {
-					var url = window.location.toString();
-					var langUrl = "https://keys.support/" + languageCode + "/download-center";
+					var langUrl = "https://keys.express/" + languageCode + "/download-center";
 					window.open(langUrl + '?return=false', "_self");
+
+					jQuery('#loading-popup').fadeOut();
 				}
+			},
+			error: function (xhr, status, error) {
+				console.error("AJAX Error:", error);
 			}
 		});
 	});
 	
-	jQuery('#software-filter-download').on('change', function () {
-		let slug = jQuery(this).val();
-		let languageCodes = ['en', 'de', 'nl', 'fr', 'el', 'it', 'pt-pt', 'es', 'cs', 'tr', 'sk', 'be'];
 	
+	jQuery('#software-filter-download').on('click', function () {
+		// Toggle dropdown visibility
+		jQuery('.software-dropdown-options').toggle();
+	});
+	
+	// When an option is clicked, perform the redirection logic
+	jQuery('.software-dropdown-options').on('click', 'li', function () {
+		// Show the loading popup
+		jQuery('#loading-popup').show();
+
+		let slug = jQuery(this).data('value');  // Get the selected slug
+	
+		let languageCodes = ['en', 'de', 'nl', 'fr', 'el', 'it', 'pt-pt', 'es', 'cs', 'tr', 'sk', 'be'];
 		let url = window.location.toString();
 		let langUrl;
+		let baseUrl = "https://keys.express";  // Replace this with your base URL if needed
 	
-		//langUrl = baseUrl + "/product/" + slug + "/?slug=" + slug;
-		//window.open(langUrl, "_self", 'slug=' + slug);
-
-		 for (let i = 0; i < languageCodes.length; i++) {
-		 	let langCode = languageCodes[i];
-		 	if (url.includes('/' + langCode + '/')) {
-		 		langUrl = baseUrl +"/"+ langCode + "/product/" + slug + "/?slug=" + slug;
-		 		window.open(langUrl, "_self", 'slug=' + slug);
-		 		break;
-		 	}
-		 }
-	});
-
-	jQuery('select.system-filter-download').on('change', function(){
-		var selectedSystem = jQuery(this).val();
-		
-		// Hide all elements by default
-		jQuery(".system-64-bit-label, .system-64-bit-button, .descr_64, .system-32-bit-label, .system-32-bit-button, .descr_32").hide();
-	
-		// Show the relevant elements based on the selected system
-		if (selectedSystem === "64-bit") {
-			jQuery(".system-64-bit-label, .system-64-bit-button, .descr_64").show();
-		} else if (selectedSystem === "32-bit") {
-			jQuery(".system-32-bit-label, .descr_32").show();
-			jQuery(".system-32-bit-button").css("display", "inline-block");
-		} else {
-			// Default case
-			jQuery(".system-64-bit-label, .system-64-bit-button, .descr_64").show();
+		// Check for language in the URL and construct the correct redirection link
+		for (let i = 0; i < languageCodes.length; i++) {
+			let langCode = languageCodes[i];
+			if (url.includes('/' + langCode + '/')) {
+				langUrl = baseUrl + "/" + langCode + "/product/" + slug + "/?slug=" + slug;
+				window.open(langUrl, "_self", 'slug=' + slug);
+				break;
+			}
+			jQuery('#loading-popup').fadeOut();
 		}
 	});
+	
 	
 	jQuery("#search_by_sku_submit").click(function () {
 		let sku = jQuery("#search_by_sku_input").val();
 		let url = window.location.toString();
 		let lang = "en"; // Default to English
-	
+
+		// Show the loading popup
+		jQuery('#loading-popup').show();
+
 		// Determine language dynamically
 		for (let language of ["en", "de", "nl", "fr", "el", "it", "pt-pt", "es", "cs", "tr", "sk", "be"]) {
 			if (url.includes("/" + language + "/")) {
 				lang = language;
 				break;
 			}
-	}
+	    }
 	
 	jQuery.ajax({
-			url: ajax_object.url,
+			//url: ajax_object.url,
+			url: "https://keys.express/wp-admin/admin-ajax.php",
 			method: 'get',
 			data: { 'action': 'get_post_name', 'sku': sku, 'lang': lang },
 			dataType: 'JSON',
@@ -146,12 +166,18 @@ jQuery(document).ready(function ($){
 				var len = res.length;
 				if (len > 0) {
 					for (var i = 0; i < len; i++) {
-						var search_url = "https://keys.support/" + res[i].prod_lang + "/product/" + res[i].prod_slug + "/?slug=" + res[i].prod_slug;
+						var search_url = "https://keys.express/" + res[i].prod_lang + "/product/" + res[i].prod_slug + "/?slug=" + res[i].prod_slug;
 						window.open(search_url, "_self");
+
+						// Hide the loading popup after processing
+						jQuery('#loading-popup').fadeOut();
 					}
 				} else {
 					jQuery("#notFoundModalCenter").modal('show');
+					jQuery('#loading-popup').fadeOut();
 				}
+
+		
 			}
 		});
 	});
@@ -444,7 +470,8 @@ jQuery(document).ready(function ($){
 
 		if (email != '' && order_number != '' && product_key != ''){
 			jQuery.ajax({
-				url: ajax_object.url,
+				//url: ajax_object.url,
+				url: "https://keys.express/wp-admin/admin-ajax.php",
 				method:'post',
 				data: {'action': 'email_license_issue',
 				   'email': email,
@@ -471,7 +498,8 @@ jQuery(document).ready(function ($){
 		var email = jQuery( "#wlm_form_field_email" ).val();
 
 		jQuery.ajax({
-			url: ajax_object.url,
+			//url: ajax_object.url,
+			url: "https://keys.express/wp-admin/admin-ajax.php",
 			method:'post',
 			data: {'action': 'form_new_user_reg',
 			   'all_access': 'no',
