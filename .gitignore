@@ -23,8 +23,11 @@ wp-config.php
 # Example themes
 /wp-content/themes/twenty*/
 
-# Example plugin
-/wp-content/plugins/hello.php
+# Ignore plugin
+wp-content/plugins/*
+
+# Allow custom or important plugins
+!wp-content/plugins/ks-product-export/
 
 # Uploads
 /wp-content/uploads/
