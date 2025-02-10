@@ -1,3 +1,0 @@
-<p>Hi</p>
-<p>You have been invited to join [team_plan_name] on [site_name]</p>
-<p>[accept_invite text="Accept Team Invite"]</p>

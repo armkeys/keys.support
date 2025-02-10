@@ -1,4 +1,0 @@
-1.0.0 - 2019-03-07 - Timothy Jacobs
-	Initial Release
-1.0.1 - 2019-03-12 - Timothy Jacobs
-	Bug Fix: Payload was encoded improperly and could not be read by the scanning app.
